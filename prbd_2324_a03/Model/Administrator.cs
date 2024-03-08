@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace prbd_2324_a03.Model;
-public class Administrator : Users
+public class Administrator : User
 {
     protected Administrator() { }
 
