@@ -16,6 +16,8 @@ namespace prbd_2324_a03.Model;
     [Required]
     [MinLength(3)]
     public string Title { get; set; }
+    [Required]
+    [MinLength(3)]
     public string Description { get; set; }
     [Required]
     public DateTime Created_at { get; set; } = DateTime.Now;
@@ -27,7 +29,6 @@ namespace prbd_2324_a03.Model;
 
 
     public virtual ICollection<Operations> Operations { get; set; } = new HashSet<Operations>();
-    public virtual ICollection<Templates> Templates { get; set; } = new HashSet<Templates>();
 
     public Tricounts() { }
 

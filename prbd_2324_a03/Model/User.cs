@@ -20,7 +20,7 @@ public class User : EntityBase<PridContext> {
     [Required]
     public string Mail { get; set; }
     [Required]
-    public Role Role { get; protected set; } = Role.User;
+    public Role Role { get; set; } = Role.User;
     public User() { }
 
     public virtual ICollection<Tricounts> CreatedTricounts { get; set; } = new HashSet<Tricounts>();
@@ -29,7 +29,6 @@ public class User : EntityBase<PridContext> {
     public virtual ICollection<Operations> CreatedOperations { get; set; } = new HashSet<Operations>();
 
     public virtual ICollection<Repartitions> Repartitions { get; set; } = new HashSet<Repartitions>();
-    public virtual ICollection<Template_items> Template_Items { get; set; } = new HashSet<Template_items>();
     public User (string mail,string full_name, string password) {
         Mail = mail;
         Full_name = full_name;
