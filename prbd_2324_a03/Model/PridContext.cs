@@ -121,6 +121,15 @@ public class PridContext : DbContextBase
             new User { UserId = 5, Mail = "admin@epfc.eu", Password = "C9949A02A5DFBE50F1DA289DC162E3C97443AB09CE6F6EB1FD0C9D51B5241BBD:5533437973C5BC6459DB687CA5BDE76C:100000:SHA256", Full_name = "Administrator", Role = Role.Administrator }
         );
 
+        modelBuilder.Entity<Tricounts>().HasData(
+    new Tricounts { Id = 1, Title = "Gers 2023", Created_at = new DateTime(2023, 10, 10, 18, 42, 24), Creator = 1 },
+    new Tricounts { Id = 2, Title = "Resto badminton", Created_at = new DateTime(2023, 10, 10, 19, 25, 10), Creator = 1 },
+    new Tricounts { Id = 4, Title = "Vacances", Description = "A la mer du nord", Created_at = new DateTime(2023, 10, 10, 19, 31, 9), Creator = 1 },
+    new Tricounts { Id = 5, Title = "Grosse virée", Description = "A Torremolinos", Created_at = new DateTime(2023, 8, 15, 10, 0, 0), Creator = 2 },
+    new Tricounts { Id = 6, Title = "Torhout Werchter", Description = "Memorabile", Created_at = new DateTime(2023, 6, 2, 18, 30, 12), Creator = 3 }
+);
+
+
 
         modelBuilder.Entity<Subscriptions>().HasData(
           new Subscriptions { UserId = 1, TricountId = 1 },
