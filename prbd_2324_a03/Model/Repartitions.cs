@@ -25,6 +25,6 @@ public class Repartitions : EntityBase<PridContext>
     public int Weight { get; set; }
 
 
-    public virtual ICollection<User> Users { get; set; } = new HashSet<User>();
+    
 
 }
