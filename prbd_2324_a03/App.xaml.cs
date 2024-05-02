@@ -2,10 +2,24 @@
 using prbd_2324_a03.ViewModel;
 using System.Windows;
 using System.Globalization;
+using PRBD_Framework;
 
 namespace prbd_2324_a03;
 
-public partial class App {
+public partial class App : ApplicationBase<User, PridContext>
+{
+
+    public enum Messages
+    {
+        MSG_NEW_MEMBER,
+        MSG_PSEUDO_CHANGED,
+        MSG_MEMBER_CHANGED,
+        MSG_DISPLAY_MEMBER,
+        MSG_CLOSE_TAB,
+        MSG_LOGIN
+    } 
+
+
     public App() {
         var ci = new CultureInfo("fr-BE") {
             DateTimeFormat = {
@@ -22,7 +36,7 @@ public partial class App {
     protected override void OnStartup(StartupEventArgs e) {
         PrepareDatabase();
         TestQueries();
-
+        
     }
 
     private static void PrepareDatabase() {
