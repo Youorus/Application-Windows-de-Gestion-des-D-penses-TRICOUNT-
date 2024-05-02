@@ -23,7 +23,6 @@ public partial class App {
         PrepareDatabase();
         TestQueries();
 
-        NavigateTo<MainViewModel, User, PridContext>();
     }
 
     private static void PrepareDatabase() {

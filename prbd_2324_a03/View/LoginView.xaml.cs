@@ -2,9 +2,9 @@
 
 namespace prbd_2324_a03.View;
 
-public partial class MainView : WindowBase
+public partial class LoginView : WindowBase
 {
-    public MainView() {
+    public LoginView() {
         InitializeComponent();
     }
 }
