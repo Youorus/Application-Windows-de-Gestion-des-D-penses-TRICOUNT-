@@ -36,9 +36,7 @@ public class LoginViewModel : ViewModelCommon
             } else {
                 if (string.IsNullOrEmpty(Password)) {
                     AddError(nameof(Password), "Password is required");
-                } else if (Password.Length < 3) {
-                    AddError(nameof(Password), "Password length must be >= 3");
-                } else if (user.Password != Password) {
+                } else if (!SecretHasher.Verify(Password, user.Password)) {
                     AddError(nameof(Password), "Wrong password");
                 }
             }
