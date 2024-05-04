@@ -9,6 +9,7 @@
     <ApplicationIcon />
     <StartupObject>prbd_2324_a03.App</StartupObject>
 	<LangVersion>default</LangVersion>
+	<RootNamespace>prbd_2324_a03</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
