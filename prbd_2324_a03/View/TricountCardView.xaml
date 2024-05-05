@@ -3,71 +3,86 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
       xmlns:vm="clr-namespace:prbd_2324_a03.ViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="170" d:DesignWidth="202">
 
+
     <Border Background="LightGray" CornerRadius="10" Padding="5">
         <StackPanel>
             <!-- Header -->
-            <TextBlock Text="TiTre" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
 
             <!-- Description -->
-            <TextBlock Text="Description" FontStyle="Italic" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding Description}" FontStyle="Italic" HorizontalAlignment="Center"/>
 
             <!-- Author -->
             <TextBlock FontSize="9" HorizontalAlignment="Center" Margin="0,5,0,0">
-                <Run Text="Created by"/>
-                <Run Text="boris" FontWeight="DemiBold"/>
+     <Run Text="Created by"/>
+     <Run Text="{Binding CreatorTricount.Full_name}" FontWeight="DemiBold"/>
             </TextBlock>
+
             <!-- Created Date -->
             <TextBlock FontSize="9" HorizontalAlignment="Center">
-                <Run Text="on"/>
-                <Run Text="10/10/2020"/>
+     <Run Text="on"/>
+     <Run Text="{Binding Created_at, StringFormat=dd/MM/yyyy}"/>
             </TextBlock>
 
             <!-- Last operation -->
             <TextBlock FontSize="9" HorizontalAlignment="Center" Margin="0,5,0,5">
-                <Run Text="Last operation on"/>
-                <Run Text="23/11/2010" FontWeight="DemiBold"/>
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding LastOperationDate}" Value="{x:Static sys:DateTime.MinValue}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+    <Run Text="Last operation on"/>
+    <Run Text="{Binding LastOperationDate, StringFormat=dd/MM/yyyy}" FontWeight="DemiBold"/>
             </TextBlock>
 
             <!-- Number friends -->
             <TextBlock FontSize="9" HorizontalAlignment="Center">
-                <Run Text="With"/>
-                <Run Text="3"/>
-                <Run Text="friends"/>
+     <Run Text="With"/>
+     <Run Text="{Binding CountUser}"/>
+     <Run Text="friends"/>
             </TextBlock>
+
             <!-- Number operation -->
             <TextBlock FontSize="9" HorizontalAlignment="Center" Margin="0,0,0,5">
-                 <Run Text="6"/>
-                 <Run Text="operations"/>
+      <Run Text="{Binding CountOperation}"/>
+      <Run Text="operations"/>
             </TextBlock>
 
             <!-- Total Expense -->
             <TextBlock FontSize="9" Margin="0,5,0,0">
-                <Run Text="Total Expenses: "/>
-                <Run Text="                                        "/> <!-- Ajouter un espace -->
-                <Run Text="400"/>
-                <Run Text="€"/>   
+     <Run Text="Total Expenses: "/>
+     <Run Text="                                 "/> <!-- Ajouter un espace -->
+     <Run Text="{Binding ExpenseTricount, StringFormat={}{0:N2}}"/>
+     <Run Text="€"/>
             </TextBlock>
             
             <!-- My Expenses -->
             <TextBlock FontSize="9">
-                 <Run Text="Total Expense: "/>
-                 <Run Text="                                          "/> <!-- Ajouter un espace -->
-                 <Run Text="400"/>
-                 <Run Text="€"/>
+      <Run Text="My Expense: "/>
+      <Run Text="                                  "/> <!-- Ajouter un espace -->
+      <Run Text="{Binding MyExpenseTricount, StringFormat={}{0:N2}}"/>
+      <Run Text="€"/>
             </TextBlock>
             
-            <!-- Total Expense -->
+            <!-- My Balance-->
             <TextBlock FontSize="9">
-              <Run Text="My Balance: " FontWeight="Bold"/>
-              <Run Text="                                            "/> <!-- Ajouter un espace -->
-              <Run Text="400" FontWeight="Bold" Foreground="Red"/>
-              <Run Text="€" FontWeight="Bold" Foreground="Red" />
+   <Run Text="My Balance: " FontWeight="Bold"/>
+    <Run Text="                                   "/> <!-- Ajouter un espace -->
+   <Run Text="{Binding MyBalanceTricount, StringFormat={}{0:N2}}" FontWeight="Bold" Foreground="Red"/>
+   <Run Text="€" FontWeight="Bold" Foreground="Red" />
             </TextBlock>
+
 
         </StackPanel>
     </Border>

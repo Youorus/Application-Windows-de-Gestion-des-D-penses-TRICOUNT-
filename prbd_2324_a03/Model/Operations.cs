@@ -22,7 +22,7 @@ public class Operations : EntityBase<PridContext>
     public double Amount { get; set; }
 
     [Required]
-    public DateTime OperationDate { get; set; } // Ajusté pour être conforme à la convention
+    public DateTime OperationDate { get; set; }
 
     [Required]
     [ForeignKey(nameof(Creator))]

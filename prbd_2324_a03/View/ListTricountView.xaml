@@ -13,16 +13,13 @@
         <vm:ListTricountViewModel x:Name="vm"/>
     </UserControl.DataContext>
 
-    <StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" Width="auto"/>
-            <Button Content="Clear" Command="{Binding ClearFilter}"/>
-        </StackPanel>
-        <ListView ItemsSource="{Binding Members}">
+  
+        <ListView ItemsSource="{Binding Tricounts}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Pseudo}"/>
+                    <local:TricountCardView/>
                 </DataTemplate>
             </ListView.ItemTemplate>
-    </StackPanel>
+        </ListView>
+  
 </UserControl>

@@ -216,6 +216,8 @@ public class PridContext : DbContextBase
     public DbSet<Tricounts> Tricounts => Set<Tricounts>();
     public DbSet<Operations> Operations => Set<Operations>();
 
+    public DbSet<Subscriptions> Subscriptions => Set<Subscriptions>();
+
     public DbSet<Repartitions> Repartitions => Set<Repartitions>();
 
 
