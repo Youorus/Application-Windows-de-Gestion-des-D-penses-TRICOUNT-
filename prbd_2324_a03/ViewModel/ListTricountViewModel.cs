@@ -11,6 +11,7 @@ namespace prbd_2324_a03.ViewModel
     public class ListTricountViewModel : ViewModelCommon {
         int userId = 1;
 
+
         public ObservableCollectionFast<Tricounts> Tricounts { get; set; } = new();
 
         public ListTricountViewModel() {
@@ -18,10 +19,12 @@ namespace prbd_2324_a03.ViewModel
         }
 
         protected override void OnRefreshData() {
-           
+
 
             Tricounts.RefreshFromModel(Context.Tricounts
-                                          .Where(t => t.Creator == userId));
+                              .Where(t => t.Creator == userId)
+                              .OrderByDescending(t => t.Created_at));
+
 
             CalculateLastOperationDate();
             CountUserTricount();

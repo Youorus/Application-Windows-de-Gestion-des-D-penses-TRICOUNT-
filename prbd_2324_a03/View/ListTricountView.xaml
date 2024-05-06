@@ -13,13 +13,16 @@
         <vm:ListTricountViewModel x:Name="vm"/>
     </UserControl.DataContext>
 
-  
-        <ListView ItemsSource="{Binding Tricounts}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <local:TricountCardView/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-  
+    <ItemsControl ItemsSource="{Binding Tricounts}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <local:TricountCardView Margin="5"/>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>
