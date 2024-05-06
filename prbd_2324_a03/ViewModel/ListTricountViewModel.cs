@@ -5,11 +5,14 @@ using System.Text;
 using PRBD_Framework;
 using System.Threading.Tasks;
 using prbd_2324_a03.Model;
+using System.Reflection;
 
 namespace prbd_2324_a03.ViewModel
 {
     public class ListTricountViewModel : ViewModelCommon {
         int userId = 1;
+
+        public string TitleWindows;
 
 
         public ObservableCollectionFast<Tricounts> Tricounts { get; set; } = new();
@@ -31,6 +34,8 @@ namespace prbd_2324_a03.ViewModel
             CountOperationTricount();
             ExpenseTricount();
             MyExpenseTricountAndBalance();
+
+            TitleWindows = GetEmailUser();
 
         }
 
@@ -101,6 +106,10 @@ namespace prbd_2324_a03.ViewModel
 
                 // Affecter la balance de l'utilisateur spécifique à MyBalanceTricount
                 tricount.MyBalanceTricount = balanceForUser;
+
+                if (tricount.MyBalanceTricount < 0) {
+                    
+                }
 
                 // Calculer la dépense de l'utilisateur en prenant en compte sa balance
                 if (tricount.MyBalanceTricount < 0) {
@@ -174,6 +183,13 @@ namespace prbd_2324_a03.ViewModel
             }
 
             return totalExpense;
+        }
+
+        public string GetEmailUser() {
+          var x = Context.Users.Where(u => u.UserId == userId).Select(u => u.Mail);
+
+            return "My Tricount (" + x +")";
+
         }
 
 
