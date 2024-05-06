@@ -83,25 +83,104 @@ namespace prbd_2324_a03.ViewModel
 
             }
         }
-      
+
 
         private void MyExpenseTricountAndBalance() {
-
             foreach (var tricount in Tricounts) {
-                var expenses = (from o in Context.Operations
-                                where o.TricountId == tricount.Id && o.InitiatorId == userId
-                                select o.Amount).Sum();
+                // Calculer les dépenses de l'utilisateur dans le tricount
+                var expenses = GetUserTotalExpenseInTricount(userId, tricount.Id);
 
-                tricount.MyExpenseTricount = expenses;
+                // Calculer la balance de l'utilisateur dans le tricount
+                var userBalances = CalculateUserBalances(tricount.Id);
 
-                tricount.MyBalanceTricount = tricount.MyExpenseTricount - tricount.CountOperation;
+                // Récupérer la balance de l'utilisateur spécifique
+                double balanceForUser = userBalances[userId];
 
+                // Affecter la balance de l'utilisateur spécifique à MyBalanceTricount
+                tricount.MyBalanceTricount = balanceForUser;
+
+                // Calculer la dépense de l'utilisateur en prenant en compte sa balance
+                if (tricount.MyBalanceTricount < 0) {
+                    // Si la balance est négative, ajouter la valeur absolue de la balance aux dépenses
+                    decimal absoluteBalance = (decimal)tricount.MyBalanceTricount * -1;
+                    tricount.MyExpenseTricount = expenses + (double)absoluteBalance;
+                } else {
+                    // Sinon, ajouter simplement la balance aux dépenses
+                    tricount.MyExpenseTricount = expenses + tricount.MyBalanceTricount;
+                }
             }
         }
 
+
+        public Dictionary<int, double> CalculateUserBalances(int tricountId) {
+            var userBalances = new Dictionary<int, double>();
+
+            // Initialiser les soldes de chaque utilisateur participant au tricount à zéro
+            foreach (var userId in GetUserIdsInTricount(tricountId)) {
+                userBalances.Add(userId, 0);
+            }
+
+            // Parcourir chaque dépense dans le tricount
+            var expenses = Context.Operations.Where(o => o.TricountId == tricountId).ToList();
+            foreach (var expense in expenses) {
+                double totalExpense = expense.Amount;
+
+                // Parcourir chaque répartition dans la dépense
+                var repartitions = Context.Repartitions.Where(r => r.OperationId == expense.Id).ToList();
+                foreach (var repartition in repartitions) {
+                    int userId = repartition.UserId;
+                    decimal weight = repartition.Weight;
+
+                    // Calculer la part de la dépense pour l'utilisateur concerné
+                    double userShare = (double)totalExpense * ((double)weight / (double)TotalWeightsInExpense(expense.Id));
+
+                    // Ajouter la part de la dépense au solde de l'utilisateur concerné
+                    userBalances[userId] -= userShare;
+                }
+
+                // Ajouter le montant total de la dépense au solde de l'initiateur de la dépense
+                userBalances[expense.InitiatorId] += totalExpense;
+            }
+
+            return userBalances;
+        }
+
+
+
+        private IEnumerable<int> GetUserIdsInTricount(int tricountId) {
+    return Context.Repartitions
+        .Where(r => r.OperationId == tricountId)
+        .Select(r => r.UserId)
+        .Distinct();
+}
+
+        private decimal TotalWeightsInExpense(int operationId) {
+            return Context.Repartitions.Where(r => r.OperationId == operationId).Sum(r => r.Weight);
+        }
+
+        public double GetUserTotalExpenseInTricount(int userId, int tricountId) {
+            double totalExpense = 0;
+
+            // Parcourir chaque dépense dans le tricount
+            var expenses = Context.Operations.Where(o => o.TricountId == tricountId).ToList();
+            foreach (var expense in expenses) {
+                // Vérifier si l'utilisateur est l'initiateur de la dépense
+                if (expense.InitiatorId == userId) {
+                    totalExpense += expense.Amount;
+                }
+            }
+
+            return totalExpense;
+        }
+
+
+
+
+
+
     }
 
-   
+
 
 
 }
