@@ -6,6 +6,7 @@ using PRBD_Framework;
 using System.Threading.Tasks;
 using prbd_2324_a03.Model;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace prbd_2324_a03.ViewModel
 {
@@ -14,6 +15,11 @@ namespace prbd_2324_a03.ViewModel
 
         public string TitleWindows;
 
+        public ICommand NewTricount { get; set; }
+
+
+        //on n'informe l'application que l'on veut creer un nouveau tricount
+      
 
         public ObservableCollectionFast<Tricounts> Tricounts { get; set; } = new();
 
@@ -34,6 +40,8 @@ namespace prbd_2324_a03.ViewModel
             CountOperationTricount();
             ExpenseTricount();
             MyExpenseTricountAndBalance();
+
+            NewTricount = new RelayCommand(() => { NotifyColleagues(App.Messages.MSG_NEW_TRICOUNT, new Tricounts()); });
 
             TitleWindows = GetEmailUser();
 

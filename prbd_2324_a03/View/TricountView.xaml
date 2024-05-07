@@ -35,26 +35,6 @@
             </TabItem>
         </f:MyTabControl>
 
-        <!-- Footer Grid -->
-        <Grid Grid.Row="2"  Height="40">
-            <!-- Bouton à gauche -->
-            <Button Content=" New Tricount " x:Name="btnNew" Command="{Binding NewTricount}"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
-
-            <!-- Border avec des couleurs différentes à droite -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
-              
-                    <Border Width="30" Height="10" Background="LightGray" Margin="5"/>
-                    <TextBlock Text=" Null balance "/>
-
-
-                <Border Width="30"  Height="10" Background="LightGreen"  Margin="5"/>
-                    <TextBlock Text=" Positive Balance "/>
-
-
-                <Border Width="30"  Height="10" Background="LightCoral"  Margin="5"/>
-                    <TextBlock Text=" Negative Balance "/>
-             
-            </StackPanel>
-        </Grid>
+       
     </Grid>
 </f:WindowBase>
