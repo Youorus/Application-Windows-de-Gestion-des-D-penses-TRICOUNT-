@@ -128,8 +128,8 @@ namespace prbd_2324_a03.ViewModel
             var userBalances = new Dictionary<int, double>();
 
             // Initialiser les soldes de chaque utilisateur participant au tricount à zéro
-            foreach (var userId in GetUserIdsInTricount(tricountId)) {
-                userBalances.Add(userId, 0);
+            foreach (var x in GetUserIdsInTricount(tricountId)) {
+                userBalances.Add(x, 0);
             }
 
             // Parcourir chaque dépense dans le tricount
@@ -160,11 +160,11 @@ namespace prbd_2324_a03.ViewModel
 
 
         private IEnumerable<int> GetUserIdsInTricount(int tricountId) {
-    return Context.Repartitions
-        .Where(r => r.OperationId == tricountId)
-        .Select(r => r.UserId)
-        .Distinct();
-}
+            return Context.Subscriptions
+                .Where(s => s.TricountId == tricountId)
+                .Select(s => s.UserId)
+                .Distinct();
+        }
 
         private decimal TotalWeightsInExpense(int operationId) {
             return Context.Repartitions.Where(r => r.OperationId == operationId).Sum(r => r.Weight);

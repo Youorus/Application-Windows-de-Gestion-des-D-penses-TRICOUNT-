@@ -11,7 +11,7 @@ public partial class App : ApplicationBase<User, PridContext>
 
     public enum Messages
     {
-        MSG_NEW_MEMBER,
+        MSG_NEW_TRICOUNT,
         MSG_PSEUDO_CHANGED,
         MSG_MEMBER_CHANGED,
         MSG_DISPLAY_MEMBER,

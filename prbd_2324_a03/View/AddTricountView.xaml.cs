@@ -1,4 +1,5 @@
-﻿using PRBD_Framework;
+﻿using prbd_2324_a03.Model;
+using PRBD_Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace prbd_2324_a03.View
     /// </summary>
     public partial class AddTricountView : UserControl
     {
-        public AddTricountView() {
+        public AddTricountView(Tricounts tricounts, bool isNew) {
             InitializeComponent();
         }
     }

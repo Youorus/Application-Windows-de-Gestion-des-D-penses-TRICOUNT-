@@ -38,7 +38,7 @@
         <!-- Footer Grid -->
         <Grid Grid.Row="2"  Height="40">
             <!-- Bouton à gauche -->
-            <Button Content=" New Tricount " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+            <Button Content=" New Tricount " x:Name="btnNew" Command="{Binding NewTricount}"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
 
             <!-- Border avec des couleurs différentes à droite -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
