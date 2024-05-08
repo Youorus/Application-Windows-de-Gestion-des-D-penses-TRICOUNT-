@@ -1,10 +1,12 @@
-﻿using prbd_2324_a03.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using prbd_2324_a03.Model;
 using PRBD_Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace prbd_2324_a03.ViewModel
@@ -19,7 +21,8 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _selectedParticipant, value);
         }
 
-        public ICommand AddUserCommand { get; private set; }
+        public ICommand AddUserCommand { get; set; }
+        public ICommand AddAllUserCommand { get; set; }
 
 
         private string _fullName;
@@ -28,14 +31,21 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _fullName, value);
         }
 
-        private List<User> _otherUsers;
-        public List<User> Users {
+
+        private ObservableCollectionFast<User> _allUsers;
+        public ObservableCollectionFast<User> AllUser {
+            get => _allUsers;
+            set => SetProperty(ref _allUsers, value);
+        }
+
+        private ObservableCollectionFast<User> _otherUsers;
+        public ObservableCollectionFast<User> Users {
             get => _otherUsers;
             set => SetProperty(ref _otherUsers, value);
         }
 
-        private List<User> _usersParticipants;
-        public List<User> Participants {
+        private ObservableCollectionFast<User> _usersParticipants;
+        public ObservableCollectionFast<User> Participants {
             get => _usersParticipants;
             set => SetProperty(ref _usersParticipants, value);
         }
@@ -98,28 +108,66 @@ namespace prbd_2324_a03.ViewModel
             var usersList = Context.Users.Where(user => user.UserId != _userId).ToList();
 
             if (usersList != null) {
-                _otherUsers = usersList;
+                _otherUsers = new ObservableCollectionFast<User>(usersList);
+            } else {
+                _otherUsers = new ObservableCollectionFast<User>();
+            }
+        }
+
+        public void AllUsersList() {
+            var allUsersList = Context.Users.ToList();
+
+            if (allUsersList != null) {
+                _allUsers = new ObservableCollectionFast<User>(allUsersList);
+            } else {
+                _allUsers = new ObservableCollectionFast<User>();
             }
         }
 
         public void UsersParticipantDefault() {
-            var usersDefault = Context.Users.Where(user => user.UserId == _userId);
+            if (_usersParticipants == null) {
+                _usersParticipants = new ObservableCollectionFast<User>();
+            }
 
-           Console.Write()
-
+            var userDefault = Context.Users.FirstOrDefault(user => user.UserId == _userId);
+            if (userDefault != null) {
+                _usersParticipants.Add(userDefault);
+            }
         }
+
+        private void AddAction() {
+            if (_selectedParticipant != null) {
+                _usersParticipants.Add(_selectedParticipant);
+                _otherUsers.Remove(_selectedParticipant);
+
+            }
+        }
+
+        private void AddAllUsersAction() {
+            foreach (var user in _otherUsers) {
+                _usersParticipants.Add(user);
+            }
+        }
+
+
+
 
         public AddTricountViewModel(Tricounts tricount, bool isNew) {
             Tricount = tricount;
             IsNew = isNew;
-            UserName();
-            UsersList();
-            UsersParticipantDefault();
+            OnRefreshData();
         }
 
         protected override void OnRefreshData() {
+            UserName();
+            UsersList();
+            UsersParticipantDefault();
 
-            // Implementer la logique de rafraîchissement des données si nécessaire
+
+            AddUserCommand = new RelayCommand(AddAction, ()=> _selectedParticipant != null);
+
+            AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => _usersParticipants != _allUsers);
+
         }
 
     }

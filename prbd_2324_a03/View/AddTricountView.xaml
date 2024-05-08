@@ -81,7 +81,7 @@
         <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Users}"  DisplayMemberPath="Full_name"  SelectedItem="{Binding SelectedParticipant}" Margin="20,296,0,0" VerticalAlignment="Top" Width="280"/>
         <Button Content="Add"  Command="{Binding AddUserCommand}" HorizontalAlignment="Left" Margin="310,296,0,0" VerticalAlignment="Top" Height="22" Width="40"/>
         <Button Content="Add My self" HorizontalAlignment="Left" Margin="60,323,0,0" VerticalAlignment="Top" Width="94"/>
-        <Button Content="Add Everybody" HorizontalAlignment="Left" Margin="180,323,0,0" VerticalAlignment="Top" Width="95"/>
+        <Button Content="Add Everybody" Command="{Binding AddAllUserCommand}" HorizontalAlignment="Left" Margin="180,323,0,0" VerticalAlignment="Top" Width="95"/>
     </Grid>
     
 </UserControl>
