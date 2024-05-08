@@ -5,16 +5,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace prbd_2324_a03.ViewModel
 {
     public class AddTricountViewModel : ViewModelCommon {
         private readonly int _userId = 1;
 
+
+        private User _selectedParticipant;
+        public User SelectedParticipant {
+            get => _selectedParticipant;
+            set => SetProperty(ref _selectedParticipant, value);
+        }
+
+        public ICommand AddUserCommand { get; private set; }
+
+
         private string _fullName;
         public string FullName {
             get => _fullName;
             set => SetProperty(ref _fullName, value);
+        }
+
+        private List<User> _otherUsers;
+        public List<User> Users {
+            get => _otherUsers;
+            set => SetProperty(ref _otherUsers, value);
+        }
+
+        private List<User> _usersParticipants;
+        public List<User> Participants {
+            get => _usersParticipants;
+            set => SetProperty(ref _usersParticipants, value);
         }
 
         private Tricounts _tricount;
@@ -71,10 +94,27 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+        public void UsersList() {
+            var usersList = Context.Users.Where(user => user.UserId != _userId).ToList();
+
+            if (usersList != null) {
+                _otherUsers = usersList;
+            }
+        }
+
+        public void UsersParticipantDefault() {
+            var usersDefault = Context.Users.Where(user => user.UserId == _userId);
+
+           Console.Write()
+
+        }
+
         public AddTricountViewModel(Tricounts tricount, bool isNew) {
             Tricount = tricount;
             IsNew = isNew;
             UserName();
+            UsersList();
+            UsersParticipantDefault();
         }
 
         protected override void OnRefreshData() {
