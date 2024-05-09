@@ -10,8 +10,11 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:AddTricountViewModel, IsDesignTimeCreatable=False}"
               d:DesignHeight="390" d:DesignWidth="528">
-           
-      
+
+    <UserControl.Resources>
+        <BitmapImage x:Key="trash" UriSource="/images/trash.png"/>
+    </UserControl.Resources>
+
 
 
 
@@ -64,7 +67,7 @@
 
         <!-- Boutons d'action -->
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,20,20">
-            <Button Content="Save" Margin="0,0,20,0" Width="75"/>
+            <Button Content="Save" Command="{Binding SaveTricountCommand}" Margin="0,0,20,0" Width="75"/>
             <Button Content="Cancel" Width="75"/>
         </StackPanel>
         <ListBox ItemsSource="{Binding Participants}" Margin="20,235,400,210">
@@ -72,7 +75,9 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Full_name}" />
+                        <Image Source="trash.png" Width="16" Height="16" Margin="5,0,0,0" />
                     </StackPanel>
+                   
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -80,7 +85,7 @@
         <Label Content="Participants" HorizontalAlignment="Left" FontWeight="Bold" Margin="20,207,0,0" VerticalAlignment="Top"/>
         <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Users}"  DisplayMemberPath="Full_name"  SelectedItem="{Binding SelectedParticipant}" Margin="20,296,0,0" VerticalAlignment="Top" Width="280"/>
         <Button Content="Add"  Command="{Binding AddUserCommand}" HorizontalAlignment="Left" Margin="310,296,0,0" VerticalAlignment="Top" Height="22" Width="40"/>
-        <Button Content="Add My self" HorizontalAlignment="Left" Margin="60,323,0,0" VerticalAlignment="Top" Width="94"/>
+        <Button Content="Add My self"  Command="{Binding AddMySelfCommand}" HorizontalAlignment="Left" Margin="60,323,0,0" VerticalAlignment="Top" Width="94"/>
         <Button Content="Add Everybody" Command="{Binding AddAllUserCommand}" HorizontalAlignment="Left" Margin="180,323,0,0" VerticalAlignment="Top" Width="95"/>
     </Grid>
     

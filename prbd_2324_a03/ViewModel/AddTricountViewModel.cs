@@ -3,6 +3,7 @@ using prbd_2324_a03.Model;
 using PRBD_Framework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,10 @@ namespace prbd_2324_a03.ViewModel
 
         public ICommand AddUserCommand { get; set; }
         public ICommand AddAllUserCommand { get; set; }
+
+        public ICommand SaveTricountCommand { get; set; }
+
+        public ICommand AddMySelfCommand { get; set; }
 
 
         private string _fullName;
@@ -136,18 +141,37 @@ namespace prbd_2324_a03.ViewModel
         }
 
         private void AddAction() {
-            if (_selectedParticipant != null) {
+            if (_selectedParticipant != null && !_usersParticipants.Contains(_selectedParticipant)) {
                 _usersParticipants.Add(_selectedParticipant);
                 _otherUsers.Remove(_selectedParticipant);
 
             }
         }
 
-        private void AddAllUsersAction() {
-            foreach (var user in _otherUsers) {
-                _usersParticipants.Add(user);
-            }
+        private void SaveTricountAction() {
+            Console.WriteLine("Test");
         }
+
+        private void AddAllUsersAction() {
+            // Créer une copie de la liste des autres utilisateurs
+            var otherUsersCopy = new List<User>(_otherUsers);
+
+            // Ajouter chaque utilisateur de la copie à la liste des participants
+            foreach (var user in otherUsersCopy) {
+                if (!_usersParticipants.Contains(user)) {
+                    _usersParticipants.Add(user);
+                }
+            }
+
+            // Effacer la liste des autres utilisateurs
+            _otherUsers.Clear();
+        }
+
+
+        private void AddMyAction() {
+            
+        }
+
 
 
 
@@ -166,7 +190,11 @@ namespace prbd_2324_a03.ViewModel
 
             AddUserCommand = new RelayCommand(AddAction, ()=> _selectedParticipant != null);
 
-            AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => _usersParticipants != _allUsers);
+            AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => _otherUsers.Count() != 0);
+
+            SaveTricountCommand = new RelayCommand(SaveTricountAction, () => _title != null && !HasErrors);
+
+            AddMySelfCommand = new RelayCommand(AddMyAction, () => !_usersParticipants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
 
         }
 
