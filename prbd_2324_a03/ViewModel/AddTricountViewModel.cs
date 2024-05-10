@@ -29,6 +29,7 @@ namespace prbd_2324_a03.ViewModel
 
         public ICommand AddMySelfCommand { get; set; }
 
+        public bool IsDefault { get; set; }
 
         private string _fullName;
         public string FullName {
@@ -69,20 +70,30 @@ namespace prbd_2324_a03.ViewModel
 
         private string _title;
         public string Title {
-            get => _title;
-            set => SetProperty(ref _title, value, () => Validate());
+            get => Tricount?.Title;
+            set => SetProperty(Tricount.Title, value, Tricount, (t, v) => {
+                t.Title = v;
+                Validate();
+                NotifyColleagues(App.Messages.MSG_TITLE_CHANGED, Tricount);
+            });
         }
 
         private string _description;
         public string Description {
-            get => _description;
-            set => SetProperty(ref _description, value, () => Validate());
+            get => Tricount?.Description;
+            set => SetProperty(Tricount.Description, value,Tricount, (t, v) => {
+                t.Description = v;
+                Validate();
+            });
         }
 
         private DateTime _creationDate = DateTime.Now;
         public DateTime CreationDate {
-            get => _creationDate;
-            set => SetProperty(ref _creationDate, value, () => Validate());
+            get => (DateTime)(Tricount?.Created_at);
+            set => SetProperty(Tricount.Created_at, value, Tricount, (t, v) => {
+                t.Created_at = v;
+                Validate();
+            });
         }
 
         public override bool Validate() {
@@ -93,7 +104,7 @@ namespace prbd_2324_a03.ViewModel
             } else if (Context.Tricounts.Any(t => t.Creator == _userId && t.Title == Title)) {
                 AddError(nameof(Title), "Title already exists");
             }
-
+            
             if (CreationDate > DateTime.Now) {
                 AddError(nameof(CreationDate), "The Date cannot be in the future");
             }
@@ -136,9 +147,11 @@ namespace prbd_2324_a03.ViewModel
 
             var userDefault = Context.Users.FirstOrDefault(user => user.UserId == _userId);
             if (userDefault != null) {
+                userDefault.IsDefault = true; // Marquer l'utilisateur par défaut
                 _usersParticipants.Add(userDefault);
             }
         }
+
 
         private void AddAction() {
             if (_selectedParticipant != null && !_usersParticipants.Contains(_selectedParticipant)) {
@@ -148,8 +161,11 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
-        private void SaveTricountAction() {
-            Console.WriteLine("Test");
+        public override void SaveAction() {
+            if (IsNew) {
+                Context.Add(Tricount);
+                IsNew = false;
+            }
         }
 
         private void AddAllUsersAction() {
@@ -168,9 +184,14 @@ namespace prbd_2324_a03.ViewModel
         }
 
 
-        private void AddMyAction() {
-            
+        private void AddMySelfAction() {
+            var user = Context.Users.FirstOrDefault(u => u.UserId == _userId);
+            if (user != null && !_usersParticipants.Contains(user)) {
+                _usersParticipants.Add(user);
+                _otherUsers.Remove(user);
+            }
         }
+
 
 
 
@@ -192,9 +213,9 @@ namespace prbd_2324_a03.ViewModel
 
             AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => _otherUsers.Count() != 0);
 
-            SaveTricountCommand = new RelayCommand(SaveTricountAction, () => _title != null && !HasErrors);
+            SaveTricountCommand = new RelayCommand(SaveAction, ()=> !string.IsNullOrEmpty(_title) && !HasErrors);
 
-            AddMySelfCommand = new RelayCommand(AddMyAction, () => !_usersParticipants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
+            AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !_usersParticipants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
 
         }
 

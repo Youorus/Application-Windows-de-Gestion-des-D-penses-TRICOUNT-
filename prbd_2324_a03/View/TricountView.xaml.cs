@@ -24,6 +24,8 @@ namespace prbd_2324_a03.View
             InitializeComponent();
 
             Register<Tricounts>(App.Messages.MSG_NEW_TRICOUNT, tricounts => DoDisplayMember(tricounts, true));
+
+            Register<Tricounts>(App.Messages.MSG_TITLE_CHANGED, tricounts => DoRenameTab(string.IsNullOrEmpty(tricounts.Title) ? "<New Tricount>" : tricounts.Title));
         }
 
         private void DoDisplayMember(Tricounts tricounts, bool isNew) {
@@ -37,6 +39,14 @@ namespace prbd_2324_a03.View
                 tabControl.Add(createView(), header, tag);
             else
                 tabControl.SetFocus(tab);
+        }
+
+
+        private void DoRenameTab(string header) {
+            if (tabControl.SelectedItem is TabItem tab) {
+                MyTabControl.RenameTab(tab, header);
+                tab.Tag = header;
+            }
         }
     }
 }

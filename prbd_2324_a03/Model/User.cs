@@ -1,5 +1,6 @@
 ﻿using PRBD_Framework;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace prbd_2324_a03.Model;
 
@@ -21,6 +22,9 @@ public class User : EntityBase<PridContext> {
     public string Mail { get; set; }
     [Required]
     public Role Role { get; set; } = Role.User;
+
+    [NotMapped]
+    public bool IsDefault { get; set; }
     public User() { }
 
     public virtual ICollection<Tricounts> CreatedTricounts { get; set; } = new HashSet<Tricounts>();
