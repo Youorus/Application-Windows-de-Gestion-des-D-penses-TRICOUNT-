@@ -23,5 +23,10 @@ namespace prbd_2324_a03.View
         public ListTricountView() {
             InitializeComponent();
         }
+
+        private void ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            Console.WriteLine("TESt");
+        }
+
     }
 }
