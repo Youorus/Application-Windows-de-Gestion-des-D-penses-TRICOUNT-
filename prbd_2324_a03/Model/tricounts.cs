@@ -57,10 +57,11 @@ namespace prbd_2324_a03.Model
 
         public Tricounts() { }
 
-        public Tricounts(string title, string description, DateTime created_at) {
+        public Tricounts(string title, string description, DateTime created_at, int  creator) {
             Title = title;
             Description = description;
             Created_at = created_at;
+            Creator = creator;
         }
     }
 }

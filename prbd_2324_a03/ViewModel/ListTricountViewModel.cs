@@ -25,6 +25,13 @@ namespace prbd_2324_a03.ViewModel
 
         public ListTricountViewModel() {
             OnRefreshData();
+            Register<Tricounts>(App.Messages.MSG_TRICOUNT_CHANGED, Tricounts => OnRefreshData());
+        }
+
+        private void ApplyFilterAction() {
+            Tricounts.RefreshFromModel(Context.Tricounts
+                .Where(t => t.Creator == userId)
+                .OrderByDescending(t => t.Created_at));
         }
 
         protected override void OnRefreshData() {

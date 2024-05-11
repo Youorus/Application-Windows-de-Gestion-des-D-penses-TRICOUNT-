@@ -23,4 +23,5 @@ public class Subscriptions : EntityBase<PridContext>
     public virtual User User { get; set; }
 
 
+ 
 }

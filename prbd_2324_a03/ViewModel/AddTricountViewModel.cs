@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using prbd_2324_a03.Model;
 using PRBD_Framework;
 using System;
@@ -161,12 +162,41 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+
+
         public override void SaveAction() {
             if (IsNew) {
-                Context.Add(Tricount);
+                // Créer un nouveau Tricount avec les données fournies
+                var tricount = new Tricounts {
+                    Title = Title,
+                    Description = string.IsNullOrEmpty(Description) ? "Description Vide" : Description,
+                    Created_at = CreationDate,
+                    Creator = _userId
+                };
+
+                // Ajouter le Tricount au contexte
+                Context.Tricounts.Add(tricount);
+                Context.SaveChanges();
+
+                // Ajouter toutes les souscriptions associées au nouveau Tricount
+                foreach (var user in _usersParticipants) {
+                    var subscription = new Subscriptions {
+                        TricountId = tricount.Id,
+                        UserId = user.UserId
+                    };
+                    Context.Subscriptions.Add(subscription);
+                }
+
+                // Sauvegarder tous les changements dans la base de données
+                Context.SaveChanges();
+
+                // Mettre à jour le statut IsNew et notifier les collègues
                 IsNew = false;
+                NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
             }
         }
+
+
 
         private void AddAllUsersAction() {
             // Créer une copie de la liste des autres utilisateurs
@@ -213,7 +243,7 @@ namespace prbd_2324_a03.ViewModel
 
             AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => _otherUsers.Count() != 0);
 
-            SaveTricountCommand = new RelayCommand(SaveAction, ()=> !string.IsNullOrEmpty(_title) && !HasErrors);
+            SaveTricountCommand = new RelayCommand(SaveAction);
 
             AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !_usersParticipants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
 

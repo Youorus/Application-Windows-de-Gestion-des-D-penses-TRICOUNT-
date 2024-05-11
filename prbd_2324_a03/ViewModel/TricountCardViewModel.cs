@@ -12,6 +12,8 @@ namespace prbd_2324_a03.ViewModel
     {
         private readonly Tricounts _tricount;
 
+        int userId = 1;
+
         public DateTime LastOperationDate { get; private set; }
 
 
@@ -23,5 +25,13 @@ namespace prbd_2324_a03.ViewModel
         public TricountCardViewModel(Tricounts tricounts) {
             Tricounts = tricounts;
         }
+
+
+
+
+
+
+
+
     }
 }
