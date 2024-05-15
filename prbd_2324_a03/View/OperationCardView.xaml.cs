@@ -16,14 +16,12 @@ using System.Windows.Shapes;
 namespace prbd_2324_a03.View
 {
     /// <summary>
-    /// Logique d'interaction pour conception.xaml
+    /// Interaction logic for OperationCardView.xaml
     /// </summary>
-    public partial class conception : Page
+    public partial class OperationCardView : UserControl
     {
-        public conception() {
+        public OperationCardView() {
             InitializeComponent();
         }
-
-     
     }
 }

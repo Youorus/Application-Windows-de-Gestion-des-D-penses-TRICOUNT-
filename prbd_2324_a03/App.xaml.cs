@@ -14,6 +14,7 @@ public partial class App : ApplicationBase<User, PridContext>
         MSG_NEW_TRICOUNT,
         MSG_TITLE_CHANGED,
         MSG_TRICOUNT_CHANGED,
+        MSG_DISPLAY_TRICOUNT,
         MSG_DISPLAY_MEMBER,
         MSG_CLOSE_TAB,
         MSG_LOGIN

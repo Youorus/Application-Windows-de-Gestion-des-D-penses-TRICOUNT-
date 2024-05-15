@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using prbd_2324_a03.Model;
+using prbd_2324_a03.ViewModel;
 using PRBD_Framework;
 
 
@@ -25,7 +27,12 @@ namespace prbd_2324_a03.View
         }
 
         private void ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            Console.WriteLine("TESt");
+            if (listView.SelectedItem != null) {
+                var tricount = listView.SelectedItem as Tricounts;
+                var tricountDetailsViewModel = new TricountDetailsViewModel(tricount);
+                vm.TricountDetailsView.Execute(tricountDetailsViewModel); // je passe a la vue la viewModel du tricount Actuelle 
+
+            }
         }
 
     }

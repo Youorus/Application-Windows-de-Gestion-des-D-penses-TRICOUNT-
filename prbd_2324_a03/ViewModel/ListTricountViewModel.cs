@@ -16,16 +16,21 @@ namespace prbd_2324_a03.ViewModel
         public string TitleWindows;
 
         public ICommand NewTricount { get; set; }
+        public ICommand TricountDetailsView { get; set; }
+
+
 
 
         //on n'informe l'application que l'on veut creer un nouveau tricount
-      
+
 
         public ObservableCollectionFast<Tricounts> Tricounts { get; set; } = new();
 
         public ListTricountViewModel() {
             OnRefreshData();
             Register<Tricounts>(App.Messages.MSG_TRICOUNT_CHANGED, Tricounts => OnRefreshData());
+
+            TricountDetailsView = new RelayCommand<TricountDetailsViewModel>(vm => { NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, vm.Tricount); });
         }
 
        

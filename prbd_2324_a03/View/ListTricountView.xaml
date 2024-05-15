@@ -39,7 +39,7 @@
             </Grid.RowDefinitions>
 
             <Grid>
-                <ListView ItemsSource="{Binding Tricounts}" MouseDoubleClick="ListView_MouseDoubleClick">
+                <ListView x:Name="listView"  ItemsSource="{Binding Tricounts}" MouseDoubleClick="ListView_MouseDoubleClick">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal"/>

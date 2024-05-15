@@ -23,12 +23,15 @@ namespace prbd_2324_a03.View
         public TricountView() {
             InitializeComponent();
 
-            Register<Tricounts>(App.Messages.MSG_NEW_TRICOUNT, tricounts => DoDisplayMember(tricounts, true));
+            Register<Tricounts>(App.Messages.MSG_NEW_TRICOUNT, tricounts => DoDisplayTricount(tricounts, true));
+
+            Register<Tricounts>(App.Messages.MSG_DISPLAY_TRICOUNT, tricounts => DoDisplayTricountDetails(tricounts));
+
 
             Register<Tricounts>(App.Messages.MSG_TITLE_CHANGED, tricounts => DoRenameTab(string.IsNullOrEmpty(tricounts.Title) ? "<New Tricount>" : tricounts.Title));
         }
 
-        private void DoDisplayMember(Tricounts tricounts, bool isNew) {
+        private void DoDisplayTricount(Tricounts tricounts, bool isNew) {
             if (tricounts != null)
                 OpenTab(isNew ? "<New Tricount>" : tricounts.Title, tricounts.Title, () => new AddTricountView(tricounts, isNew)); 
         }
@@ -39,6 +42,11 @@ namespace prbd_2324_a03.View
                 tabControl.Add(createView(), header, tag);
             else
                 tabControl.SetFocus(tab);
+        }
+
+        private void DoDisplayTricountDetails(Tricounts tricounts) {
+            if (tricounts != null)
+                OpenTab(tricounts.Title, tricounts.Title, () => new TricountDetailsView(tricounts));
         }
 
 
