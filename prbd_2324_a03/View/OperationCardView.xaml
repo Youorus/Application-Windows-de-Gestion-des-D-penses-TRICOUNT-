@@ -5,29 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:prbd_2324_a03.View"
              mc:Ignorable="d" 
-             d:DesignHeight="60" d:DesignWidth="310">
+             d:DesignHeight="80" d:DesignWidth="400">
     <Grid>
-        <Border Background="LightGray" CornerRadius="10" Padding="5">
+        <Border Background="LightGray" CornerRadius="5" Padding="5">
             <Grid>
-                <!-- Define two columns -->
+                <!-- Define two columns with margin to create space between them -->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <!-- Spacer column -->
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Left StackPanel with two TextBlocks -->
                 <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <TextBlock Text="Operation" FontWeight="Bold"/>
-                    <TextBlock >
-                    <Run Text="Paid by XY"/>
-                    <Run Text="" FontWeight="DemiBold"/>
-                    </TextBlock> 
+                    <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                    <TextBlock>
+                        <Run Text="Paid by "/>
+                        <Run Text="{Binding Creator.Full_name}"/>
+                    </TextBlock>
                 </StackPanel>
 
                 <!-- Right StackPanel with two TextBlocks -->
-                <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <TextBlock Text="Price" HorizontalAlignment="Center" FontWeight="Bold"/>
-                    <TextBlock Text="date operation" />
+                <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock FontWeight="Bold">
+                        <Run Text="{Binding Amount, StringFormat={}{0:N2}}"/>
+                        <Run Text="€"/>
+                    </TextBlock>
+                    <TextBlock Text="{Binding OperationDate, StringFormat=dd/MM/yyyy}" />
                 </StackPanel>
             </Grid>
         </Border>

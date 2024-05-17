@@ -24,10 +24,10 @@
  <Run Text="{Binding Tricount.Created_at,  StringFormat=dd/MM/yyyy}"/>
             </TextBlock>
         </StackPanel>
-        <ItemsControl Margin="10,91,400,79">
+        <ItemsControl ItemsSource="{Binding Operations}" Margin="10,91,400,79">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
+                    <WrapPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>

@@ -1,4 +1,6 @@
-﻿using prbd_2324_a03.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using prbd_2324_a03.Model;
+using PRBD_Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +17,12 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _tricount, value);
         }
 
+        public ObservableCollectionFast<Operations> Operations { get; set; } = new();
+
         public TricountDetailsViewModel(Tricounts tricount) {
             Tricount = tricount;
+
+            Operations.RefreshFromModel(Context.Operations.Include(o => o.Creator).Where(o => o.TricountId == Tricount.Id));
         }
 
     }
