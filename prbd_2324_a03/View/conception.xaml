@@ -27,13 +27,17 @@
     <Run />
             </TextBlock>
         </StackPanel>
-        <ListView d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,91,400,79" >
+        <ListView Margin="10,91,400,79" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
+            <Button Content="Button"/>
         </ListView>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="168,410,0,0" VerticalAlignment="Top" Height="25" Width="74"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="637,415,0,0" VerticalAlignment="Top"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="706,415,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>

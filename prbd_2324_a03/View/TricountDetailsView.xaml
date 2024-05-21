@@ -36,6 +36,9 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Button Content="+" HorizontalAlignment="Left" FontSize="25" FontWeight="Bold" Margin="168,410,0,0" VerticalAlignment="Center" Padding="0"/>
+        <Button Content="Edit" HorizontalAlignment="Left"  Command="{Binding EditTricountCommand}" Margin="640,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
+        <Button Content="Delete" HorizontalAlignment="Left" Margin="700,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
 
     </Grid>
 </UserControl>

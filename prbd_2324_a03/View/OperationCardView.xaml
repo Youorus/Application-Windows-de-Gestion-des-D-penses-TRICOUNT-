@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:prbd_2324_a03.View"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="400">
+             d:DesignHeight="80" d:DesignWidth="750">
     <Grid>
         <Border Background="LightGray" CornerRadius="5" Padding="5">
             <Grid>
                 <!-- Define two columns with margin to create space between them -->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="20" />
+                    <!-- Increase the width here -->
                     <!-- Spacer column -->
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>

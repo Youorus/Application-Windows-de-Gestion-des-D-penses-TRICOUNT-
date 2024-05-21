@@ -25,6 +25,8 @@ namespace prbd_2324_a03.View
 
             Register<Tricounts>(App.Messages.MSG_NEW_TRICOUNT, tricounts => DoDisplayTricount(tricounts, true));
 
+
+
             Register<Tricounts>(App.Messages.MSG_DISPLAY_TRICOUNT, tricounts => DoDisplayTricountDetails(tricounts));
 
 
@@ -35,6 +37,7 @@ namespace prbd_2324_a03.View
             if (tricounts != null)
                 OpenTab(isNew ? "<New Tricount>" : tricounts.Title, tricounts.Title, () => new AddTricountView(tricounts, isNew)); 
         }
+
 
         private void OpenTab(string header, string tag, Func<UserControl> createView) {
             var tab = tabControl.FindByTag(tag);

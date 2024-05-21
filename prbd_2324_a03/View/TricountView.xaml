@@ -29,7 +29,7 @@
             <MenuItem Header="Reset"/>
         </Menu>
 
-        <f:MyTabControl x:Name="tabControl" Margin="10" Grid.Row="1">
+        <f:MyTabControl HasCloseButton="True" x:Name="tabControl" Margin="10" Grid.Row="1">
             <TabItem x:Name="membersTab" Header="Tricount" Tag="Members">
                 <local:ListTricountView/>
             </TabItem>

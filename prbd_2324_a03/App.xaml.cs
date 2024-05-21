@@ -12,6 +12,7 @@ public partial class App : ApplicationBase<User, PridContext>
     public enum Messages
     {
         MSG_NEW_TRICOUNT,
+        MSG_EDIT_TRICOUNT,
         MSG_TITLE_CHANGED,
         MSG_TRICOUNT_CHANGED,
         MSG_DISPLAY_TRICOUNT,
