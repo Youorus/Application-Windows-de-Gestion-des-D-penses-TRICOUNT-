@@ -74,7 +74,7 @@
                 <TextBlock FontSize="9" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,111,88,0">
                     <Run Text="Total Expenses: "/>
                 </TextBlock>
-                <TextBlock FontSize="9" Grid.Column="2" Margin="39,111,26,0">
+                <TextBlock FontSize="9" Grid.Column="2" Margin="39,111,10,0">
                     <Run Text="{Binding ExpenseTricount, StringFormat={}{0:N2}}"/>
                     <Run Text=" €"/>
                 </TextBlock>
