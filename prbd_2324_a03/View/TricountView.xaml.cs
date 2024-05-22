@@ -25,6 +25,7 @@ namespace prbd_2324_a03.View
 
             Register<Tricounts>(App.Messages.MSG_NEW_TRICOUNT, tricounts => DoDisplayTricount(tricounts, true));
 
+            //Register<Tricounts>(App.Messages.MSG_NEW_OPERATION, tricounts => DoDisplayOperation(tricounts, true));
 
 
             Register<Tricounts>(App.Messages.MSG_DISPLAY_TRICOUNT, tricounts => DoDisplayTricountDetails(tricounts));
@@ -38,6 +39,11 @@ namespace prbd_2324_a03.View
                 OpenTab(isNew ? "<New Tricount>" : tricounts.Title, tricounts.Title, () => new AddTricountView(tricounts, isNew)); 
         }
 
+        //private void DoDisplayOperation(Tricounts tricounts, bool isNew) {
+        //    if (tricounts != null)
+        //        OpenTab("Add operation", "Add operation", () => new AddOperationView(tricounts, isNew));
+        //}
+
 
         private void OpenTab(string header, string tag, Func<UserControl> createView) {
             var tab = tabControl.FindByTag(tag);
@@ -49,6 +55,8 @@ namespace prbd_2324_a03.View
 
         private void DoDisplayTricountDetails(Tricounts tricounts) {
             if (tricounts != null)
+                Console.WriteLine(tricounts.Title);
+            
                 OpenTab(tricounts.Title, tricounts.Title, () => new TricountDetailsView(tricounts));
         }
 

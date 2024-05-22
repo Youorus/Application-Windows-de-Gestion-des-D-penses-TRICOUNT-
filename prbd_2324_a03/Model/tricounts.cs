@@ -34,27 +34,6 @@ namespace prbd_2324_a03.Model
 
         public virtual ICollection<Operations> Operations { get; set; } = new HashSet<Operations>();
 
-        [NotMapped]
-        public DateTime LastOperationDate { get; set; }
-
-        [NotMapped]
-        public int CountUser { get; set; }
-
-        [NotMapped]
-        public int CountOperation { get; set; }
-
-        [NotMapped]
-        public double ExpenseTricount { get; set; }
-
-        [NotMapped]
-        public double MyExpenseTricount { get; set; }
-
-        [NotMapped]
-        public double MyBalanceTricount { get; set; }
-
-        [NotMapped]
-        public Dictionary<int, double> Balances { get; set; } = new Dictionary<int, double>();
-
         public Tricounts() { }
 
         public Tricounts(string title, string description, DateTime created_at, int  creator) {

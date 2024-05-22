@@ -8,37 +8,129 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 
-        <!-- Titre et informations -->
-        <StackPanel Margin="20,20,20,364">
-            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,3,0,0">      
- <Run Text="{Binding Tricount.Title}"/>
-          <Run Text=" - "/>
- <Run Text="{Binding Tricount.Description}" FontSize="18" FontWeight="Normal" FontStyle="Italic"/>
-            </TextBlock>
+        <!-- Grille 1 -->
+        <Grid>
+            <!-- Titre et informations -->
+            <StackPanel Margin="20,20,20,253">
+                <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,3,0,0">      
+                    <Run Text="&lt;New Tricount&gt;"/>
+                    <Run Text=" - No Description" FontSize="18" FontWeight="Normal" FontStyle="Italic"/>
+                </TextBlock>
 
-            <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,3,0,0">
- <Run Text="Created by"/>
-          <Run Text="{Binding Tricount.CreatorTricount.Full_name}" FontWeight="DemiBold"/>
- <Run FontWeight="Bold" Text=""/>
- <Run Text=" on"/>
- <Run Text="{Binding Tricount.Created_at,  StringFormat=dd/MM/yyyy}"/>
-            </TextBlock>
-        </StackPanel>
-        <ItemsControl ItemsSource="{Binding Operations}" Margin="10,91,400,79">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <local:OperationCardView Margin="5"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        <Button Content="+" HorizontalAlignment="Left" FontSize="25" FontWeight="Bold" Margin="168,410,0,0" VerticalAlignment="Center" Padding="0"/>
-        <Button Content="Edit" HorizontalAlignment="Left"  Command="{Binding EditTricountCommand}" Margin="640,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
-        <Button Content="Delete" HorizontalAlignment="Left" Margin="700,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,3,0,0">
+                    <Run Text="Created by"/>
+                    <Run FontWeight="Bold" Text="{Binding FullName}"/>
+                    <Run Text=" on"/>
+                    <Run Text="{Binding CreationDate,  StringFormat=dd/MM/yyyy}"/>
+                </TextBlock>
+            </StackPanel>
+
+            <!-- Entrées utilisateur -->
+            <Grid Margin="20,82,62,256">
+                <!-- Première ligne -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Première ligne -->
+                <Label Content="Title:" Grid.Row="0" Grid.Column="0" Margin="0,10,0,10"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"  Margin="0,10,0,10" Width="Auto" MinWidth="200"/>
+
+                <!-- Troisième ligne -->
+                <Label Content="Description:" Grid.Row="1" Grid.Column="0" Margin="0,10,0,0"/>
+                <TextBox TextWrapping="Wrap" Text="{Binding Description}" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Width="Auto" MinWidth="200"/>
+
+                <!-- Deuxième ligne -->
+                <Label Content="Creation date:" Grid.Row="2" Grid.Column="0" Margin="0,10,0,0"/>
+                <DatePicker Grid.Row="2" Text="{Binding CreationDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd/MM/yyyy}" Grid.Column="1" Margin="0,10,0,124" Width="Auto" MinWidth="200"/>
+            </Grid>
+
+            <!-- Boutons d'action -->
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,20,20">
+                <Button Content="Save" Command="{Binding SaveTricountCommand}" Margin="0,0,20,0" Width="75"/>
+                <Button Content="Cancel" Width="75"/>
+            </StackPanel>
+
+            <ListBox ItemsSource="{Binding Participants}" Margin="20,235,400,210">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Full_name}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDefault}"  Value="True">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock/>
+                            <Image Source="images/trash.png" Width="16" Height="16" Margin="5,0,0,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Label Content="Participants" HorizontalAlignment="Left" FontWeight="Bold" Margin="20,207,0,0" VerticalAlignment="Top"/>
+            <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Users}"  DisplayMemberPath="Full_name"  SelectedItem="{Binding SelectedParticipant}" Margin="20,296,0,0" VerticalAlignment="Top" Width="280"/>
+            <Button Content="Add"  Command="{Binding AddUserCommand}" HorizontalAlignment="Left" Margin="310,296,0,0" VerticalAlignment="Top" Height="22" Width="40"/>
+            <Button Content="Add My self"  Command="{Binding AddMySelfCommand}" HorizontalAlignment="Left" Margin="60,323,0,0" VerticalAlignment="Top" Width="94"/>
+            <Button Content="Add Everybody" Command="{Binding AddAllUserCommand}" HorizontalAlignment="Left" Margin="180,323,0,0" VerticalAlignment="Top" Width="95"/>
+        </Grid>
+
+        <!-- Grille 2 -->
+        <Grid>
+            <!-- Titre et informations -->
+            <StackPanel Margin="20,20,20,364">
+                <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,3,0,0">      
+                    <Run Text="{Binding Tricount.Title}"/>
+                    <Run Text=" - "/>
+                    <Run Text="{Binding Tricount.Description}" FontSize="18" FontWeight="Normal" FontStyle="Italic"/>
+                </TextBlock>
+
+                <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,3,0,0">
+                    <Run Text="Created by"/>
+                    <Run Text="{Binding Tricount.CreatorTricount.Full_name}" FontWeight="DemiBold"/>
+                    <Run FontWeight="Bold" Text=""/>
+                    <Run Text=" on"/>
+                    <Run Text="{Binding Tricount.Created_at,  StringFormat=dd/MM/yyyy}"/>
+                </TextBlock>
+            </StackPanel>
+
+            <!-- ItemsControl -->
+            <ItemsControl ItemsSource="{Binding Operations}" Margin="10,91,400,79">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:OperationCardView Margin="5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Boutons "Edit" et "Delete" -->
+            <Button Content="Edit" HorizontalAlignment="Left" Command="{Binding EditTricountCommand}" Margin="640,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
+            <Button Content="Delete" HorizontalAlignment="Left" Margin="700,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
+
+            <!-- Bouton "+" -->
+            <Button Content="+" HorizontalAlignment="Left" Command="{Binding AddOperationTricountCommand}" FontSize="25" FontWeight="Bold" Margin="168,410,0,0" VerticalAlignment="Center" Padding="0"/>
+        </Grid>
 
     </Grid>
 </UserControl>
+
+
+
+
+

@@ -4,38 +4,40 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:prbd_2324_a03.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="750">
-    <Grid>
-        <Border Background="LightGray" CornerRadius="5" Padding="5">
-            <Grid>
-                <!-- Define two columns with margin to create space between them -->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="20" />
-                    <!-- Increase the width here -->
-                    <!-- Spacer column -->
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+             mc:Ignorable="d">
 
-                <!-- Left StackPanel with two TextBlocks -->
-                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
-                    <TextBlock>
+    <Border Background="LightGray" CornerRadius="5" Width="Auto" Height="Auto">
+        <Grid>
+            <!-- Define two columns with margin to create space between them -->
+            <!-- Define two columns with margin to create space between them -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <!-- Modifier la largeur ici -->
+                <ColumnDefinition Width="20" />
+                <!-- Spacer column -->
+                <ColumnDefinition Width="2*" />
+                <!-- Modifier la largeur ici -->
+            </Grid.ColumnDefinitions>
+
+
+            <!-- Left StackPanel with two TextBlocks -->
+            <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                <TextBlock>
                         <Run Text="Paid by "/>
                         <Run Text="{Binding Creator.Full_name}"/>
-                    </TextBlock>
-                </StackPanel>
+                </TextBlock>
+            </StackPanel>
 
-                <!-- Right StackPanel with two TextBlocks -->
-                <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <TextBlock FontWeight="Bold">
+            <!-- Right StackPanel with two TextBlocks -->
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold">
                         <Run Text="{Binding Amount, StringFormat={}{0:N2}}"/>
                         <Run Text="€"/>
-                    </TextBlock>
-                    <TextBlock Text="{Binding OperationDate, StringFormat=dd/MM/yyyy}" />
-                </StackPanel>
-            </Grid>
-        </Border>
-    </Grid>
+                </TextBlock>
+                <TextBlock Text="{Binding Create_at, StringFormat=dd/MM/yyyy}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+
 </UserControl>

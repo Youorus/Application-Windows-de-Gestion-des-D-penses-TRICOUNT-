@@ -16,26 +16,46 @@ namespace prbd_2324_a03.ViewModel
         private Tricounts _tricount;
         public Tricounts Tricount {
             get => _tricount;
-            set => SetProperty(ref _tricount, value);
+            set {
+                if (SetProperty(ref _tricount, value)) {
+                    OnRefreshData();
+                }
+            }
         }
 
         public ICommand EditTricountCommand { get; set; }
-
-        public ObservableCollectionFast<Operations> Operations { get; set; } = new();
+        public ICommand AddOperationTricountCommand { get; set; }
+        public ObservableCollectionFast<OperationCardViewModel> Operations { get; set; } = new ObservableCollectionFast<OperationCardViewModel>();
 
         public TricountDetailsViewModel(Tricounts tricount) {
             Tricount = tricount;
+            OnRefreshData();
 
-            Operations.RefreshFromModel(Context.Operations.Include(o => o.Creator).Where(o => o.TricountId == Tricount.Id));
-
-
-            EditTricountCommand = new RelayCommand(() => { NotifyColleagues(App.Messages.MSG_NEW_TRICOUNT, Tricount); });
-
-
-
-
-
+            EditTricountCommand = new RelayCommand(EditTricount);
+            AddOperationTricountCommand = new RelayCommand(AddOperation);
         }
 
+        private void EditTricount() {
+            NotifyColleagues(App.Messages.MSG_EDIT_TRICOUNT, Tricount);
+        }
+
+        private void AddOperation() {
+            NotifyColleagues(App.Messages.MSG_NEW_OPERATION, Tricount);
+        }
+
+        protected override void OnRefreshData() {
+            if (Tricount == null) return;
+
+            Operations.Clear();
+            var operationsTricount = Context.Operations
+                                             .Include(o => o.Creator)
+                                             .Where(o => o.TricountId == Tricount.Id)
+                                             .ToList();
+
+            foreach (var operation in operationsTricount) {
+                var viewModel = new OperationCardViewModel(operation);
+                Operations.Add(viewModel);
+            }
+        }
     }
 }

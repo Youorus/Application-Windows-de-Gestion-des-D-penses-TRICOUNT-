@@ -28,12 +28,16 @@ namespace prbd_2324_a03.View
 
         private void ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (listView.SelectedItem != null) {
-                var tricount = listView.SelectedItem as Tricounts;
-                var tricountDetailsViewModel = new TricountDetailsViewModel(tricount);
-                vm.TricountDetailsView.Execute(tricountDetailsViewModel); // je passe a la vue la viewModel du tricount Actuelle 
+                var tricountCardViewModel = listView.SelectedItem as TricountCardViewModel;
+                if (tricountCardViewModel != null) {
+                    Tricounts tricount = tricountCardViewModel.Tricount;
 
+                    var tricountDetails = new TricountDetailsViewModel(tricount);
+
+
+                 vm.TricountDetailsView.Execute(tricountDetails);
+                }
             }
         }
-
     }
 }

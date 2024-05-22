@@ -24,6 +24,6 @@ namespace prbd_2324_a03.View
             InitializeComponent();
         }
 
-     
+      
     }
 }
