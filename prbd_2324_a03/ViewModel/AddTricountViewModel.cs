@@ -18,14 +18,20 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _selectedParticipant, value);
         }
 
+
+        private bool _isVisibleOperationTricount;
+        public bool IsVisibleOperationTricount {
+            get => _isVisibleOperationTricount;
+            set => SetProperty(ref _isVisibleOperationTricount, value);
+        }
+
         public ICommand AddUserCommand { get; set; }
         public ICommand AddAllUserCommand { get; set; }
         public ICommand SaveTricountCommand { get; set; }
         public ICommand AddMySelfCommand { get; set; }
 
         public bool IsVisibleEditTricount { get; set; } = false;
-
-        public bool IsVisibleDetailsTricount { get; set; } = false;
+     
 
 
 

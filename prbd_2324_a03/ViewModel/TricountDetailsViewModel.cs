@@ -23,6 +23,19 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+        private bool _isVisibleDetailsTricount;
+        public bool IsVisibleDetailsTricount {
+            get => _isVisibleDetailsTricount;
+            set => SetProperty(ref _isVisibleDetailsTricount, value);
+        }
+
+        private bool _isVisibleOperationTricount;
+        public bool IsVisibleOperationTricount {
+            get => _isVisibleOperationTricount;
+            set => SetProperty(ref _isVisibleOperationTricount, value);
+        }
+
+
         public ICommand EditTricountCommand { get; set; }
         public ICommand AddOperationTricountCommand { get; set; }
         public ObservableCollectionFast<OperationCardViewModel> Operations { get; set; } = new ObservableCollectionFast<OperationCardViewModel>();
@@ -31,13 +44,11 @@ namespace prbd_2324_a03.ViewModel
             Tricount = tricount;
             OnRefreshData();
 
-            EditTricountCommand = new RelayCommand(EditTricount);
+           
             AddOperationTricountCommand = new RelayCommand(AddOperation);
         }
 
-        private void EditTricount() {
-            NotifyColleagues(App.Messages.MSG_EDIT_TRICOUNT, Tricount);
-        }
+     
 
         private void AddOperation() {
             NotifyColleagues(App.Messages.MSG_NEW_OPERATION, Tricount);

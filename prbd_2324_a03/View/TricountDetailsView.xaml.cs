@@ -33,13 +33,24 @@ namespace prbd_2324_a03.View
 
             _addTricountVm = new AddTricountViewModel(tricounts, false);
 
-            if (!_addTricountVm.IsVisibleEditTricount)
-                DataContext = _vm;
-            else
-                DataContext = _addTricountVm;
 
+            _vm.IsVisibleDetailsTricount = false;
+            _vm.IsVisibleOperationTricount = true;
+
+            DataContext = _vm;  // Set initial DataContext
+
+        }
+        private void EditTricountButton_Click(object sender, RoutedEventArgs e) {
+            DataContext = _addTricountVm;  // Set DataContext to AddTricountViewModel
+
+        _addTricountVm.IsVisibleOperationTricount = false;
 
         }
 
+        private void Cancel_Click(object sender, RoutedEventArgs e) {
+            DataContext = _vm;
+            _vm.IsVisibleDetailsTricount = false;
+            _vm.IsVisibleOperationTricount = true;
+        }
     }
 }

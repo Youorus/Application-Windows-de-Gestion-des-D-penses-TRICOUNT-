@@ -7,10 +7,12 @@
              xmlns:local="clr-namespace:prbd_2324_a03.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    
     <Grid>
 
-        <!-- Grille 1 -->
-        <Grid Visibility="{c:Binding  IsVisibleDetailsTricount}">
+        <!-- Grille 1 editTricoutt -->
+        <Grid Visibility="{c:Binding IsVisibleDetailsTricount}">
             <!-- Titre et informations -->
             <StackPanel Margin="20,20,20,253">
                 <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,3,0,0">      
@@ -56,7 +58,7 @@
             <!-- Boutons d'action -->
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,20,20">
                 <Button Content="Save" Command="{Binding SaveTricountCommand}" Margin="0,0,20,0" Width="75"/>
-                <Button Content="Cancel" Width="75"/>
+                <Button Content="Cancel" Width="75" Click="Cancel_Click"/>
             </StackPanel>
 
             <ListBox ItemsSource="{Binding Participants}" Margin="20,235,400,210">
@@ -88,8 +90,8 @@
             <Button Content="Add Everybody" Command="{Binding AddAllUserCommand}" HorizontalAlignment="Left" Margin="180,323,0,0" VerticalAlignment="Top" Width="95"/>
         </Grid>
 
-        <!-- Grille 2 -->
-        <Grid >
+        <!-- Grille 2 des operation -->
+        <Grid Visibility="{c:Binding IsVisibleOperationTricount}">
             <!-- Titre et informations -->
             <StackPanel Margin="20,20,20,364">
                 <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,3,0,0">      
@@ -122,7 +124,8 @@
             </ItemsControl>
 
             <!-- Boutons "Edit" et "Delete" -->
-            <Button Content="Edit" HorizontalAlignment="Left" Command="{Binding EditTricountCommand}" Margin="640,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
+            <!-- Ajoutez l'événement Click au bouton "Edit" -->
+            <Button Content="Edit" HorizontalAlignment="Left" Command="{Binding EditTricountCommand}" Click="EditTricountButton_Click" Margin="640,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
             <Button Content="Delete" HorizontalAlignment="Left" Margin="700,465,0,0"  Height="20" Width="50" VerticalAlignment="Top"/>
 
             <!-- Bouton "+" -->
