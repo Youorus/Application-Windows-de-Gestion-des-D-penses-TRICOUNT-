@@ -42,5 +42,33 @@ namespace prbd_2324_a03.Model
             Created_at = created_at;
             Creator = creator;
         }
+
+        public override bool Validate() {
+            ClearErrors();
+
+            if (string.IsNullOrEmpty(Title)) {
+                AddError(nameof(Title), "Title is required");
+            } else if (Context.Tricounts.Any(t => t.Title == Title)) {
+                AddError(nameof(Title), "Title already exists");
+            }
+
+
+            if (Created_at > DateTime.Now) {
+                AddError(nameof(Created_at), "The Date cannot be in the future");
+            }
+
+            return !HasErrors;
+        }
+
+
+        public void Delete() {
+            // Supprime les relations 
+            Subscriptions.Clear();
+            Operations.Clear();
+            
+            // Supprime le Tricount lui-même
+            Context.Tricounts.Remove(this);
+            Context.SaveChanges();
+        }
     }
 }

@@ -28,6 +28,9 @@ namespace prbd_2324_a03.ViewModel
         public ICommand AddUserCommand { get; set; }
         public ICommand AddAllUserCommand { get; set; }
         public ICommand SaveTricountCommand { get; set; }
+
+        public ICommand CancelTricountCommand { get; set; }
+
         public ICommand AddMySelfCommand { get; set; }
 
         public bool IsVisibleEditTricount { get; set; } = false;
@@ -71,6 +74,10 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+        public bool IsSavedAndValid => !IsNew && !HasChanges;
+
+        public override bool MayLeave => IsSavedAndValid;
+
         private bool _isNew;
         public bool IsNew {
             get => _isNew;
@@ -108,16 +115,9 @@ namespace prbd_2324_a03.ViewModel
         public override bool Validate() {
             ClearErrors();
 
-            if (string.IsNullOrEmpty(Title)) {
-                AddError(nameof(Title), "Title is required");
-            } else if (Context.Tricounts.Any(t => t.Creator == _userId && t.Title == Title)) {
-                AddError(nameof(Title), "Title already exists");
-            }
+          Tricount.Validate();
 
-            if (CreationDate > DateTime.Now) {
-                AddError(nameof(CreationDate), "The Date cannot be in the future");
-            }
-
+            AddErrors(Tricount.Errors);
             return !HasErrors;
         }
 
@@ -206,7 +206,19 @@ namespace prbd_2324_a03.ViewModel
                 // Mettre à jour le statut IsNew et notifier les collègues
                 IsNew = false;
                 NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+                NotifyColleagues(App.Messages.MSG_CANCEL_TRICOUNT, Tricount);
             }
+        }
+
+        private void CancelTricount() {
+            if (IsNew) {
+                IsNew = false;
+                NotifyColleagues(App.Messages.MSG_CANCEL_TRICOUNT, Tricount);
+            } else {
+                Tricount.Reload();
+                RaisePropertyChanged();
+            }
+           
         }
 
         private void AddAllUsersAction() {
@@ -232,9 +244,15 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+        private bool CanCancelAction() {
+            return Tricount != null && (IsNew || Tricount.IsModified);
+        }
+
+
         public AddTricountViewModel(Tricounts tricount, bool isNew) {
             Tricount = tricount;
             IsNew = isNew;
+            RaisePropertyChanged();
             OnRefreshData();
         }
 
@@ -245,8 +263,11 @@ namespace prbd_2324_a03.ViewModel
 
             AddUserCommand = new RelayCommand(AddAction, () => SelectedParticipant != null);
             AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => Users.Count() != 0);
-            SaveTricountCommand = new RelayCommand(SaveAction);
+            SaveTricountCommand = new RelayCommand(SaveAction, () => Validate() && !HasErrors);
             AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !Participants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
+
+
+            CancelTricountCommand = new RelayCommand(CancelTricount, CanCancelAction);
         }
     }
 }

@@ -38,77 +38,54 @@ public class PridContext : DbContextBase
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
-        // l'entité Member ...
+        // Configuration des entités et des relations
         modelBuilder.Entity<User>()
-            // doit utiliser la propriété Role comme discriminateur ...
-            .HasDiscriminator(m => m.Role)
-            // en mappant la valeur Role.Member sur le type Member ...
-            .HasValue<User>(Role.User)
-            // et en mappant la valeur Role.Administator sur le type Administrator ...
-            .HasValue<Administrator>(Role.Administrator);
+                    .HasDiscriminator(m => m.Role)
+                    .HasValue<User>(Role.User)
+                    .HasValue<Administrator>(Role.Administrator);
 
-        modelBuilder.Entity<User>()
-              // doit utiliser la propriété Role comme discriminateur ...
-              .HasDiscriminator(m => m.Role)
-              // en mappant la valeur Role.Member sur le type Member ...
-              .HasValue<User>(Role.User)
-              // et en mappant la valeur Role.Administator sur le type Administrator ...
-              .HasValue<Administrator>(Role.Administrator);
-
+        modelBuilder.Entity<Tricounts>().HasKey(t => t.Id);
         modelBuilder.Entity<Tricounts>()
-            .HasKey(t => t.Id);
-
-        modelBuilder.Entity<Tricounts>()
-            .HasOne(t => t.CreatorTricount)
-            .WithMany(u => u.CreatedTricounts)
-            .HasForeignKey(t => t.Creator)
-            .OnDelete(DeleteBehavior.Restrict); // ON DELETE NO ACTION
-
-
-        // Add Subscriptions entity
-        modelBuilder.Entity<Subscriptions>()
-            .HasKey(s => new { s.TricountId, s.UserId }) ;
+         .HasMany(t => t.Operations)
+         .WithOne(o => o.Tricount)
+         .HasForeignKey(o => o.TricountId)
+         .OnDelete(DeleteBehavior.ClientCascade);
 
         modelBuilder.Entity<Subscriptions>()
-            .HasOne(s => s.Tricount)
-            .WithMany(t => t.Subscriptions)
-            .HasForeignKey(s => s.TricountId);
-
-
+                    .HasKey(s => new { s.TricountId, s.UserId });
         modelBuilder.Entity<Subscriptions>()
-            .HasOne(s => s.User)
-            .WithMany(u => u.Subscriptions)
-            .HasForeignKey(s => s.UserId).
-            OnDelete(DeleteBehavior.Restrict);
-
+                    .HasOne(s => s.Tricount)
+                    .WithMany(t => t.Subscriptions)
+                    .HasForeignKey(s => s.TricountId);
+        modelBuilder.Entity<Subscriptions>()
+                    .HasOne(s => s.User)
+                    .WithMany(u => u.Subscriptions)
+                    .HasForeignKey(s => s.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Operations>()
-           .HasOne(o => o.Tricount)
-           .WithMany(t => t.Operations )
-           .HasForeignKey(o => o.TricountId).
-           OnDelete(DeleteBehavior.Restrict);
-
+                    .HasOne(o => o.Tricount)
+                    .WithMany(t => t.Operations)
+                    .HasForeignKey(o => o.TricountId)
+                    .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Operations>()
-          .HasOne(o => o.Creator)
-          .WithMany(u => u.CreatedOperations)
-          .HasForeignKey(o => o.InitiatorId).
-          OnDelete(DeleteBehavior.Restrict);
+                    .HasOne(o => o.Creator)
+                    .WithMany(u => u.CreatedOperations)
+                    .HasForeignKey(o => o.InitiatorId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Repartitions>()
-           .HasKey(r => new {r.OperationId , r.UserId }); 
-
-
+                    .HasKey(r => new { r.OperationId, r.UserId });
         modelBuilder.Entity<Repartitions>()
-         .HasOne(r => r.Operations)
-         .WithMany(o => o.Repartitions)
-         .HasForeignKey(o => o.OperationId).
-         OnDelete(DeleteBehavior.Restrict);
-
+                    .HasOne(r => r.Operations)
+                    .WithMany(o => o.Repartitions)
+                    .HasForeignKey(o => o.OperationId)
+                    .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Repartitions>()
-        .HasOne(r => r.User)
-        .WithMany(u => u.Repartitions)
-        .HasForeignKey(o => o.UserId).
-        OnDelete(DeleteBehavior.Restrict);
+                    .HasOne(r => r.User)
+                    .WithMany(u => u.Repartitions)
+                    .HasForeignKey(o => o.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
 
 

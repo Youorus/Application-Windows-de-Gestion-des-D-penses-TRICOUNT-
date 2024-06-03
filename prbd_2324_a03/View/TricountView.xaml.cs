@@ -30,6 +30,8 @@ namespace prbd_2324_a03.View
 
             Register<Tricounts>(App.Messages.MSG_DISPLAY_TRICOUNT, tricounts => DoDisplayTricountDetails(tricounts));
 
+            Register<Tricounts>(App.Messages.MSG_CANCEL_TRICOUNT, tricounts => DoDisplayListTricount(tricounts));
+
 
             Register<Tricounts>(App.Messages.MSG_TITLE_CHANGED, tricounts => DoRenameTab(string.IsNullOrEmpty(tricounts.Title) ? "<New Tricount>" : tricounts.Title));
         }
@@ -55,9 +57,12 @@ namespace prbd_2324_a03.View
 
         private void DoDisplayTricountDetails(Tricounts tricounts) {
             if (tricounts != null)
-                Console.WriteLine(tricounts.Title);
             
                 OpenTab(tricounts.Title, tricounts.Title, () => new TricountDetailsView(tricounts));
+        }
+
+        private void DoDisplayListTricount(Tricounts tricounts) {
+             tabControl.CloseByTag(string.IsNullOrEmpty(tricounts.Title) ? "<New Tricount>" : tricounts.Title);
         }
 
 

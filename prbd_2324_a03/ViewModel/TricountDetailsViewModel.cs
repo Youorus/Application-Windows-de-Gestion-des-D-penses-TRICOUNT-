@@ -13,6 +13,11 @@ namespace prbd_2324_a03.ViewModel
 {
     public class TricountDetailsViewModel : ViewModelCommon
     {
+        public event Func<bool> DeleteTricount;
+
+ 
+
+
         private Tricounts _tricount;
         public Tricounts Tricount {
             get => _tricount;
@@ -35,8 +40,9 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _isVisibleOperationTricount, value);
         }
 
+        
 
-        public ICommand EditTricountCommand { get; set; }
+             public ICommand DeleteTricountCommand { get; set; }
         public ICommand AddOperationTricountCommand { get; set; }
         public ObservableCollectionFast<OperationCardViewModel> Operations { get; set; } = new ObservableCollectionFast<OperationCardViewModel>();
 
@@ -44,11 +50,24 @@ namespace prbd_2324_a03.ViewModel
             Tricount = tricount;
             OnRefreshData();
 
+            DeleteTricountCommand = new RelayCommand(DeleteTricountAction);
+
            
             AddOperationTricountCommand = new RelayCommand(AddOperation);
         }
 
-     
+
+        private void DeleteTricountAction() {
+            if (!(DeleteTricount?.Invoke() ?? false)) return;
+
+            Tricount.Delete();
+             NotifyColleagues(App.Messages.MSG_CANCEL_TRICOUNT, Tricount);
+
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+        }
+
+
+
 
         private void AddOperation() {
             NotifyColleagues(App.Messages.MSG_NEW_OPERATION, Tricount);

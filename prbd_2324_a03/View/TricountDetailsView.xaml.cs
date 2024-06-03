@@ -37,9 +37,12 @@ namespace prbd_2324_a03.View
             _vm.IsVisibleDetailsTricount = false;
             _vm.IsVisibleOperationTricount = true;
 
+            _vm.DeleteTricount += () => App.Confirm("You're about to delete this Tricount\nDo you confirm?");
+
             DataContext = _vm;  // Set initial DataContext
 
-        }
+
+        } 
         private void EditTricountButton_Click(object sender, RoutedEventArgs e) {
             DataContext = _addTricountVm;  // Set DataContext to AddTricountViewModel
 
@@ -47,10 +50,19 @@ namespace prbd_2324_a03.View
 
         }
 
+
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             DataContext = _vm;
+
+            // Recharger les données si nécessaire
+            if (!_addTricountVm.IsNew) {
+                _vm.Tricount.Reload();
+            }
+
+            // Rétablir la visibilité appropriée
             _vm.IsVisibleDetailsTricount = false;
             _vm.IsVisibleOperationTricount = true;
+
         }
     }
 }
