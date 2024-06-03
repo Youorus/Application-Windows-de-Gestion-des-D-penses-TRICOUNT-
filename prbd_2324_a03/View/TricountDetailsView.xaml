@@ -57,21 +57,38 @@
             <ListBox ItemsSource="{Binding Participants}" Margin="20,235,400,210">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Full_name}">
+                        <Grid>
+                            <!-- Définition des colonnes -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Affichage du nom de l'utilisateur -->
+                            <TextBlock Text="{Binding Full_name}" Grid.Column="0">
+             <!-- Style du TextBlock -->
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsDefault}"  Value="True">
+                                            <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                                 <Setter Property="FontWeight" Value="Bold"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </TextBlock.Style>
-                            </TextBlock>
-                            <TextBlock/>
-                            <Image Source="images/trash.png" Width="16" Height="16" Margin="5,0,0,0" />
-                        </StackPanel>
+                 <TextBlock  Visibility="{c:Binding IsDefault}" >(Creator)</TextBlock>
+                 </TextBlock>
+                            <TextBlock Text="                                                                                        " />
+                            <!-- Bouton de suppression -->
+                            <Button Command="{Binding DataContext.RemoveParticipant, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                 CommandParameter="{Binding}" Visibility="{c:Binding !IsDefault}"  Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Image Source="/images/trash.png" Width="16" Height="16" />
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -101,7 +118,7 @@
                 </TextBlock>
             </StackPanel>
 
-            <ListView ItemsSource="{Binding Operations}" Margin="10,71,315,93">
+            <ListView ItemsSource="{Binding Operations}" Margin="10,71,315,110">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>

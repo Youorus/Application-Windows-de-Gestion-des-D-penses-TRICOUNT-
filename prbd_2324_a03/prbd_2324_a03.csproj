@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\trash.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CalcBinding" Version="2.5.2" />
     <PackageReference Include="Dirkster.NumericUpDownLib" Version="3.4.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
@@ -31,6 +35,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PRBD_Framework\PRBD_Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\trash.png" />
   </ItemGroup>
 
 </Project>

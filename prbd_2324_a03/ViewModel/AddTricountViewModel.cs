@@ -19,6 +19,8 @@ namespace prbd_2324_a03.ViewModel
         }
 
 
+        public User IsDefault { get; set; }
+
         private bool _isVisibleOperationTricount;
         public bool IsVisibleOperationTricount {
             get => _isVisibleOperationTricount;
@@ -30,6 +32,8 @@ namespace prbd_2324_a03.ViewModel
         public ICommand SaveTricountCommand { get; set; }
 
         public ICommand CancelTricountCommand { get; set; }
+
+        public ICommand RemoveParticipant { get; set; }
 
         public ICommand AddMySelfCommand { get; set; }
 
@@ -55,6 +59,14 @@ namespace prbd_2324_a03.ViewModel
             get => _otherUsers;
             set => SetProperty(ref _otherUsers, value);
         }
+
+
+        private bool _isCreator;
+        public bool IsCreator {
+            get => _isCreator;
+            set => SetProperty(ref _isCreator, value);
+        }
+
 
         private ObservableCollectionFast<User> _usersParticipants;
         public ObservableCollectionFast<User> Participants {
@@ -158,7 +170,7 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
-        public void UsersParticipantDefault() {
+        private void UsersParticipantDefault() {
             if (Participants == null) {
                 Participants = new ObservableCollectionFast<User>();
             }
@@ -176,6 +188,9 @@ namespace prbd_2324_a03.ViewModel
                 Users.Remove(SelectedParticipant);
             }
         }
+
+      
+
 
         public override void SaveAction() {
             if (IsNew) {
@@ -249,6 +264,14 @@ namespace prbd_2324_a03.ViewModel
         }
 
 
+        private void RemoveParticipantAction(User participantToRemove) {
+            if (participantToRemove != null) {
+                Participants.Remove(participantToRemove);
+
+                // Ajoutez ici la logique supplémentaire pour supprimer le participant de la base de données, etc.
+            }
+        }
+
         public AddTricountViewModel(Tricounts tricount, bool isNew) {
             Tricount = tricount;
             IsNew = isNew;
@@ -265,7 +288,7 @@ namespace prbd_2324_a03.ViewModel
             AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => Users.Count() != 0);
             SaveTricountCommand = new RelayCommand(SaveAction, () => Validate() && !HasErrors);
             AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !Participants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
-
+           RemoveParticipant = new RelayCommand<User>(RemoveParticipantAction);
 
             CancelTricountCommand = new RelayCommand(CancelTricount, CanCancelAction);
         }
