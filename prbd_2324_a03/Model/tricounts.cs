@@ -62,11 +62,27 @@ namespace prbd_2324_a03.Model
 
 
         public void Delete() {
-            // Supprime les relations 
-            Subscriptions.Clear();
-            Operations.Clear();
+
+            var Subs = Context.Subscriptions.Where(s => s.TricountId == this.Id).ToList();
+
+            foreach (var item in Subs) {
+                Context.Subscriptions.Remove(item);
+            }
+
             
-            // Supprime le Tricount lui-même
+
+            var Oper = Context.Operations.Where(o => o.TricountId == this.Id).ToList();
+
+            foreach (var item in Oper) {
+                var repar = Context.Repartitions.Where(r => r.OperationId == item.Id).ToList();
+
+                foreach (var item1 in repar) {
+                    Context.Repartitions.Remove(item1);
+                }
+
+                Context.Operations.Remove(item);
+            }
+
             Context.Tricounts.Remove(this);
             Context.SaveChanges();
         }

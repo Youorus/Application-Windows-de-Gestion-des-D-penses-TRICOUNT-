@@ -279,6 +279,12 @@ namespace prbd_2324_a03.ViewModel
             OnRefreshData();
         }
 
+        private bool CanSaveAction() {
+            if (IsNew)
+                return !string.IsNullOrEmpty(Title);
+            return Tricount != null && Tricount.IsModified;
+        }
+
         protected override void OnRefreshData() {
             UserName();
             UsersList();
@@ -286,7 +292,7 @@ namespace prbd_2324_a03.ViewModel
 
             AddUserCommand = new RelayCommand(AddAction, () => SelectedParticipant != null);
             AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => Users.Count() != 0);
-            SaveTricountCommand = new RelayCommand(SaveAction, () => Validate() && !HasErrors);
+            SaveTricountCommand = new RelayCommand(SaveAction, CanSaveAction);
             AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !Participants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
            RemoveParticipant = new RelayCommand<User>(RemoveParticipantAction);
 

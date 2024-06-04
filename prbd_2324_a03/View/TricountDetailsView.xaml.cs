@@ -52,12 +52,13 @@ namespace prbd_2324_a03.View
 
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
+
+           
+            _addTricountVm.Tricount.Reload();
+            _addTricountVm.RaisePropertyChanged();
+
             DataContext = _vm;
 
-            // Recharger les données si nécessaire
-            if (!_addTricountVm.IsNew) {
-                _vm.Tricount.Reload();
-            }
 
             // Rétablir la visibilité appropriée
             _vm.IsVisibleDetailsTricount = false;
