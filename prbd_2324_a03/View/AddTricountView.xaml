@@ -73,7 +73,7 @@
         </StackPanel>
 
 
-        <ListBox ItemsSource="{Binding Participants}" Margin="20,235,400,210">
+        <ListBox ItemsSource="{Binding ParticipantsUsers}" Margin="20,235,400,210">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -84,7 +84,7 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Affichage du nom de l'utilisateur -->
-                        <TextBlock Text="{Binding Full_name}" Grid.Column="0">
+                        <TextBlock Text="{Binding FullName}" Grid.Column="0">
                     <!-- Style du TextBlock -->
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -96,6 +96,14 @@
                                 </Style>
                             </TextBlock.Style>
                         <TextBlock  Visibility="{c:Binding IsDefault}" >(Creator)</TextBlock>
+                              <TextBlock  Visibility="{c:Binding !IsDefault}" >
+                                  <TextBlock Visibility="{c:Binding IsExpense}">
+                                       <Run Text="("/>
+ <Run Text="{Binding Expense}"/>
+ <Run Text=" expenses)"/>
+                                  </TextBlock>
+     
+  </TextBlock>      
                         </TextBlock>
                         <TextBlock Text="                                                                                        " />
                         <!-- Bouton de suppression -->

@@ -22,9 +22,6 @@ public class User : EntityBase<PridContext> {
     public string Mail { get; set; }
     [Required]
     public Role Role { get; set; } = Role.User;
-
-    [NotMapped]
-    public bool IsDefault { get; set; }
     public User() { }
 
     public virtual ICollection<Tricounts> CreatedTricounts { get; set; } = new HashSet<Tricounts>();

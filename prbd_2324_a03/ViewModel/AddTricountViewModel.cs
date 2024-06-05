@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using prbd_2324_a03.Model;
+﻿using prbd_2324_a03.Model;
 using PRBD_Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -18,8 +16,7 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _selectedParticipant, value);
         }
 
-
-        public User IsDefault { get; set; }
+        public ObservableCollectionFast<ParticipantsListViewModel> ParticipantsUsers { get; set; } = new ObservableCollectionFast<ParticipantsListViewModel>();
 
         private bool _isVisibleOperationTricount;
         public bool IsVisibleOperationTricount {
@@ -30,23 +27,11 @@ namespace prbd_2324_a03.ViewModel
         public ICommand AddUserCommand { get; set; }
         public ICommand AddAllUserCommand { get; set; }
         public ICommand SaveTricountCommand { get; set; }
-
         public ICommand CancelTricountCommand { get; set; }
-
         public ICommand RemoveParticipant { get; set; }
-
         public ICommand AddMySelfCommand { get; set; }
 
         public bool IsVisibleEditTricount { get; set; } = false;
-     
-
-
-
-        private string _fullName;
-        public string FullName {
-            get => _fullName;
-            set => SetProperty(ref _fullName, value);
-        }
 
         private ObservableCollectionFast<User> _allUsers;
         public ObservableCollectionFast<User> AllUsers {
@@ -60,13 +45,11 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _otherUsers, value);
         }
 
-
         private bool _isCreator;
         public bool IsCreator {
             get => _isCreator;
             set => SetProperty(ref _isCreator, value);
         }
-
 
         private ObservableCollectionFast<User> _usersParticipants;
         public ObservableCollectionFast<User> Participants {
@@ -77,17 +60,10 @@ namespace prbd_2324_a03.ViewModel
         private Tricounts _tricount;
         public Tricounts Tricount {
             get => _tricount;
-            set {
-                if (SetProperty(ref _tricount, value)) {
-                    if (_tricount != null) {
-                        LoadParticipants();
-                    }
-                }
-            }
+            set => SetProperty(ref _tricount, value);
         }
 
         public bool IsSavedAndValid => !IsNew && !HasChanges;
-
         public override bool MayLeave => IsSavedAndValid;
 
         private bool _isNew;
@@ -126,75 +102,31 @@ namespace prbd_2324_a03.ViewModel
 
         public override bool Validate() {
             ClearErrors();
-
-          Tricount.Validate();
-
+            Tricount.Validate();
             AddErrors(Tricount.Errors);
             return !HasErrors;
         }
 
-        private void LoadParticipants() {
-            var participants = Context.Subscriptions
-                .Where(s => s.TricountId == Tricount.Id)
-                .Select(s => s.User)
-                .ToList();
-
-            Participants = new ObservableCollectionFast<User>(participants);
-        }
-
-        public void UserName() {
-            var user = Context.Users.FirstOrDefault(u => u.UserId == _userId);
-
-            if (user != null) {
-                FullName = user.Full_name;
-            }
-        }
-
         public void UsersList() {
             var usersList = Context.Users.Where(user => user.UserId != _userId).ToList();
-
-            if (usersList != null) {
-                Users = new ObservableCollectionFast<User>(usersList);
-            } else {
-                Users = new ObservableCollectionFast<User>();
-            }
+            Users = new ObservableCollectionFast<User>(usersList ?? new List<User>());
         }
 
         public void AllUsersList() {
             var allUsersList = Context.Users.ToList();
-
-            if (allUsersList != null) {
-                AllUsers = new ObservableCollectionFast<User>(allUsersList);
-            } else {
-                AllUsers = new ObservableCollectionFast<User>();
-            }
-        }
-
-        private void UsersParticipantDefault() {
-            if (Participants == null) {
-                Participants = new ObservableCollectionFast<User>();
-            }
-
-            var userDefault = Context.Users.FirstOrDefault(user => user.UserId == _userId);
-            if (userDefault != null) {
-                userDefault.IsDefault = true; // Marquer l'utilisateur par défaut
-                Participants.Add(userDefault);
-            }
+            AllUsers = new ObservableCollectionFast<User>(allUsersList ?? new List<User>());
         }
 
         private void AddAction() {
-            if (SelectedParticipant != null && !Participants.Contains(SelectedParticipant)) {
-                Participants.Add(SelectedParticipant);
+            var selectItem = new ParticipantsListViewModel(SelectedParticipant, Tricount.Id);
+            if (SelectedParticipant != null && !ParticipantsUsers.Contains(selectItem)) {
+                ParticipantsUsers.Add(selectItem);
                 Users.Remove(SelectedParticipant);
             }
         }
 
-      
-
-
         public override void SaveAction() {
             if (IsNew) {
-                // Créer un nouveau Tricount avec les données fournies
                 var tricount = new Tricounts {
                     Title = Title,
                     Description = string.IsNullOrEmpty(Description) ? "Description Vide" : Description,
@@ -202,23 +134,18 @@ namespace prbd_2324_a03.ViewModel
                     Creator = _userId
                 };
 
-                // Ajouter le Tricount au contexte
                 Context.Tricounts.Add(tricount);
                 Context.SaveChanges();
 
-                // Ajouter toutes les souscriptions associées au nouveau Tricount
-                foreach (var user in Participants) {
+                foreach (var participantVm in ParticipantsUsers) {
                     var subscription = new Subscriptions {
                         TricountId = tricount.Id,
-                        UserId = user.UserId
+                        UserId = participantVm.User.UserId
                     };
                     Context.Subscriptions.Add(subscription);
                 }
 
-                // Sauvegarder tous les changements dans la base de données
                 Context.SaveChanges();
-
-                // Mettre à jour le statut IsNew et notifier les collègues
                 IsNew = false;
                 NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
                 NotifyColleagues(App.Messages.MSG_CANCEL_TRICOUNT, Tricount);
@@ -233,28 +160,24 @@ namespace prbd_2324_a03.ViewModel
                 Tricount.Reload();
                 RaisePropertyChanged();
             }
-           
         }
 
         private void AddAllUsersAction() {
-            // Créer une copie de la liste des autres utilisateurs
             var otherUsersCopy = new List<User>(Users);
-
-            // Ajouter chaque utilisateur de la copie à la liste des participants
             foreach (var user in otherUsersCopy) {
-                if (!Participants.Contains(user)) {
-                    Participants.Add(user);
+                if (!ParticipantsUsers.Contains(new ParticipantsListViewModel(user, Tricount.Id))) {
+                    var vm = new ParticipantsListViewModel(user, Tricount.Id);
+                    ParticipantsUsers.Add(vm);
                 }
             }
-
-            // Effacer la liste des autres utilisateurs
             Users.Clear();
         }
 
         private void AddMySelfAction() {
             var user = Context.Users.FirstOrDefault(u => u.UserId == _userId);
-            if (user != null && !Participants.Contains(user)) {
-                Participants.Add(user);
+            if (user != null && !ParticipantsUsers.Any(p => p.User.UserId == user.UserId)) {
+                var participantVm = new ParticipantsListViewModel(user, Tricount.Id);
+                ParticipantsUsers.Add(participantVm);
                 Users.Remove(user);
             }
         }
@@ -263,12 +186,9 @@ namespace prbd_2324_a03.ViewModel
             return Tricount != null && (IsNew || Tricount.IsModified);
         }
 
-
         private void RemoveParticipantAction(User participantToRemove) {
             if (participantToRemove != null) {
                 Participants.Remove(participantToRemove);
-
-                // Ajoutez ici la logique supplémentaire pour supprimer le participant de la base de données, etc.
             }
         }
 
@@ -286,16 +206,29 @@ namespace prbd_2324_a03.ViewModel
         }
 
         protected override void OnRefreshData() {
-            UserName();
             UsersList();
-            UsersParticipantDefault();
+
+            if (IsNew) {
+                var user = Context.Users.FirstOrDefault(u => u.UserId == _userId);
+                var vm = new ParticipantsListViewModel(user, Tricount.Id);
+                ParticipantsUsers.Add(vm);
+            } else {
+                var participants = Context.Subscriptions
+                    .Where(s => s.TricountId == Tricount.Id)
+                    .Select(s => s.User)
+                    .ToList();
+
+                foreach (var item in participants) {
+                    var vm = new ParticipantsListViewModel(item, Tricount.Id);
+                    ParticipantsUsers.Add(vm);
+                }
+            }
 
             AddUserCommand = new RelayCommand(AddAction, () => SelectedParticipant != null);
-            AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => Users.Count() != 0);
+            AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => Users.Any());
             SaveTricountCommand = new RelayCommand(SaveAction, CanSaveAction);
-            AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !Participants.Contains(Context.Users.FirstOrDefault(u => u.UserId == _userId)));
-           RemoveParticipant = new RelayCommand<User>(RemoveParticipantAction);
-
+            AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !ParticipantsUsers.Any(p => p.User.UserId == _userId));
+            RemoveParticipant = new RelayCommand<User>(RemoveParticipantAction);
             CancelTricountCommand = new RelayCommand(CancelTricount, CanCancelAction);
         }
     }
