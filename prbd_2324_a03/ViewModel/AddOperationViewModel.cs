@@ -131,7 +131,7 @@ namespace prbd_2324_a03.ViewModel
             OnRefreshData();
         }
 
-        private void UpdateRepartition() {
+        public void UpdateRepartition() {
             double totalWeight = AllUsersRepartition.Sum(u => u.SelectedValue);
             double totalAmount = Amount; // Assuming Amount is the total expense
             foreach (var userRepartition in AllUsersRepartition) {
@@ -150,7 +150,7 @@ namespace prbd_2324_a03.ViewModel
             AllUsers = new ObservableCollectionFast<User>(users);
 
             foreach (var user in AllUsers) {
-                var x = new RepartitionOperationViewModel(Operation, user);
+                var x = new RepartitionOperationViewModel(Operation, user, this);
                 AllUsersRepartition.Add(x);
             }
 

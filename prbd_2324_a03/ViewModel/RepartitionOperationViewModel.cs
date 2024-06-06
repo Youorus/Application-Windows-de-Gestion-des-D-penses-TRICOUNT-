@@ -34,12 +34,11 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _showAmount, value);
         }
 
-        private double _calculatedAmount;
+        private double _calculatedAmount = 0;
         public double CalculatedAmount {
             get => _calculatedAmount;
             set => SetProperty(ref _calculatedAmount, value);
         }
-
 
         private User _selectedParticipant;
         public User SelectedParticipant {
@@ -47,22 +46,26 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _selectedParticipant, value);
         }
 
+        private readonly AddOperationViewModel addOperationViewModel;
+
         private int _selectedValue;
         public int SelectedValue {
             get => _selectedValue;
-            set => SetProperty(ref _selectedValue, value);
+            set {
+                SetProperty(ref _selectedValue, value);
+                addOperationViewModel.UpdateRepartition();
+            }
         }
+
 
 
         public string Fullname { get; set; }
-        public RepartitionOperationViewModel(Operations operations, User user) {
+        public RepartitionOperationViewModel(Operations operations, User user, AddOperationViewModel vm) {
             Operation = operations;
             SelectedParticipant = user;
-
+            addOperationViewModel = vm;
             OnRefreshData();
         }
-
-
 
         protected override void OnRefreshData() { 
         
@@ -70,10 +73,8 @@ namespace prbd_2324_a03.ViewModel
 
         }
 
-    
 
 
 
-
-    }
+        }
 }

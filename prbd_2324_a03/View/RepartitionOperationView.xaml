@@ -17,11 +17,17 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <CheckBox Content="CheckBox" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="0,8,0,1" Width="18" Grid.Column="0"/>
-        <TextBox HorizontalAlignment="Left" FontSize="10" Margin="3,8,0,0" TextWrapping="Wrap" Text="{Binding Fullname }" VerticalAlignment="Top" Width="40" Height="16" Grid.Column="1"/>
+        <CheckBox Content="CheckBox" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="0,9.5,0,1" Width="18" Grid.Column="0"/>
+        <TextBox HorizontalAlignment="Left" FontSize="12" Margin="3,8,0,0" BorderBrush="Transparent" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding Fullname }" VerticalAlignment="Top" Width="40" Height="16" Grid.Column="1"/>
         <xctk:IntegerUpDown VerticalAlignment="Top" Width="44" HorizontalAlignment="Left" 
-                     Minimum="1" Maximum="100" Margin="35,8,0,0" Height="16" Grid.Column="2"
+                     Minimum="0" Maximum="100" Margin="35,8,0,0" Height="20" Grid.Column="2"
                      Value="{Binding SelectedValue, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox HorizontalAlignment="Left" Margin="40,8,0,0" TextWrapping="Wrap" Visibility="{c:Binding ShowAmount}" FontWeight="Bold"  Text="{Binding CalculatedAmount}" VerticalAlignment="Top" Width="51" Height="16" Grid.Column="3"/>
+        <TextBox HorizontalAlignment="Left" Margin="40,8,0,0" TextWrapping="Wrap" Visibility="{c:Binding ShowAmount}" FontWeight="Bold" Text="{Binding CalculatedAmount, StringFormat={}{0:0.00€}}" VerticalAlignment="Top" Width="51" Height="16" Grid.Column="3">
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
     </Grid>
 </UserControl>

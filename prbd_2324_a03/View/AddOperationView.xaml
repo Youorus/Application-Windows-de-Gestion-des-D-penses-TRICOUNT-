@@ -29,14 +29,19 @@
         </Grid.RowDefinitions>
 
         <!-- Première rangée -->
-        <Label x:Name="label" Content="Title:" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
+        <Label x:Name="label" Content="Title:" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,26"/>
         <TextBox TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Height="26" Margin="0,0,0,5"/>
 
         <!-- Deuxième rangée -->
-        <Label Content="Amount:" Grid.Row="1" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
-        <xctk:DoubleUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="26" Margin="0,0,0,5"
-                   Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C}}"
-                   Minimum="0" Increment="0.01" ShowButtonSpinner="False" />
+        <Label Content="Amount:" Grid.Row="1" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,10"/>
+        <xctk:DoubleUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="26" Margin="0,0,0,10"
+                   Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
+                   Minimum="0" FormatString="0.00€"
+                   ShowButtonSpinner="False" TextAlignment="Left" />
+
+
+
+
 
 
 
@@ -77,7 +82,7 @@
         </ListView>
 
         <!-- Boutons -->
-        <Button Grid.Row="5" Grid.Column="1" Content="Add" HorizontalAlignment="Center" Height="20" Width="50" VerticalAlignment="Center"/>
-        <Button Grid.Row="5" Grid.Column="1" Content="Cancel" HorizontalAlignment="Left" Margin="142,0,0,0" Height="20" Width="50" VerticalAlignment="Center"/>
+        <Button Grid.Row="5" Grid.Column="1" Content="Add" HorizontalAlignment="Left" Height="20" Width="50" VerticalAlignment="Center" Margin="72,0,0,0"/>
+        <Button Grid.Row="5" Grid.Column="1" Content="Cancel" HorizontalAlignment="Left" Margin="131,0,0,0" Height="20" Width="50" VerticalAlignment="Center"/>
     </Grid>
 </f:DialogWindowBase>
