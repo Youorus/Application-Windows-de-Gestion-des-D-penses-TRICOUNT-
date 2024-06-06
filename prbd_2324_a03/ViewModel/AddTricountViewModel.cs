@@ -96,7 +96,6 @@ namespace prbd_2324_a03.ViewModel
             get => (DateTime)(Tricount?.Created_at);
             set => SetProperty(Tricount.Created_at, value, Tricount, (t, v) => {
                 t.Created_at = v;
-                Validate();
             });
         }
 
@@ -186,9 +185,14 @@ namespace prbd_2324_a03.ViewModel
             return Tricount != null && (IsNew || Tricount.IsModified);
         }
 
-        private void RemoveParticipantAction(User participantToRemove) {
+        private void RemoveParticipantAction(ParticipantsListViewModel participantToRemove) {
             if (participantToRemove != null) {
-                Participants.Remove(participantToRemove);
+                var participantToRemoveViewModel = ParticipantsUsers.FirstOrDefault(vm => vm.User == participantToRemove.User);
+                if (participantToRemoveViewModel != null) {
+                    ParticipantsUsers.Remove(participantToRemoveViewModel);
+                    // Ajoutez ici la logique supplémentaire si nécessaire
+                    _otherUsers.Add(participantToRemove.User);
+                }
             }
         }
 
@@ -221,6 +225,7 @@ namespace prbd_2324_a03.ViewModel
                 foreach (var item in participants) {
                     var vm = new ParticipantsListViewModel(item, Tricount.Id);
                     ParticipantsUsers.Add(vm);
+                    _otherUsers.Remove(item);   
                 }
             }
 
@@ -228,7 +233,7 @@ namespace prbd_2324_a03.ViewModel
             AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => Users.Any());
             SaveTricountCommand = new RelayCommand(SaveAction, CanSaveAction);
             AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !ParticipantsUsers.Any(p => p.User.UserId == _userId));
-            RemoveParticipant = new RelayCommand<User>(RemoveParticipantAction);
+            RemoveParticipant = new RelayCommand<ParticipantsListViewModel>(RemoveParticipantAction);
             CancelTricountCommand = new RelayCommand(CancelTricount, CanCancelAction);
         }
     }

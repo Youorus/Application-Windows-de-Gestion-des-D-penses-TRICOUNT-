@@ -6,38 +6,43 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
              xmlns:vm="clr-namespace:prbd_2324_a03.ViewModel"
-              xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+             xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
              xmlns:local="clr-namespace:prbd_2324_a03.View"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:AddTricountViewModel, IsDesignTimeCreatable=False}"
-              d:DesignHeight="390" d:DesignWidth="528">
+             d:DesignHeight="390" d:DesignWidth="528">
 
     <UserControl.Resources>
         <BitmapImage x:Key="trash" UriSource="/images/trash.png"/>
     </UserControl.Resources>
 
-
-
-
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
         <!-- Titre et informations -->
-        <StackPanel Margin="20,20,20,253">
+        <StackPanel Grid.Row="0" Margin="20,20,20,10">
             <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,3,0,0">      
-              <Run Text="&lt;New Tricount&gt;"/>
-              <Run Text=" - No Description" FontSize="18" FontWeight="Normal" FontStyle="Italic"/>
+                <Run Text="&lt;New Tricount&gt;"/>
+                <Run Text=" - No Description" FontSize="18" FontWeight="Normal" FontStyle="Italic"/>
             </TextBlock>
 
             <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,3,0,0">
-              <Run Text="Created by"/>
-              <Run FontWeight="Bold" Text="{Binding FullName}"/>
-              <Run Text=" on"/>
-              <Run Text="{Binding CreationDate,  StringFormat=dd/MM/yyyy}"/>
+                <Run Text="Created by"/>
+                <Run FontWeight="Bold" Text="{Binding FullName}"/>
+                <Run Text=" on"/>
+                <Run Text="{Binding CreationDate,  StringFormat=dd/MM/yyyy}"/>
             </TextBlock>
         </StackPanel>
 
         <!-- Entrées utilisateur -->
-        <Grid Margin="20,82,62,256">
-            <!-- Première ligne -->
+        <Grid Grid.Row="1" Margin="20,0,20,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -48,85 +53,87 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Première ligne -->
             <Label Content="Title:" Grid.Row="0" Grid.Column="0" Margin="0,10,0,10"/>
-            <TextBox TextWrapping="Wrap" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"  Margin="0,10,0,10" Width="Auto" MinWidth="200"/>
+            <TextBox TextWrapping="Wrap" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="0,10,0,10" Width="Auto" MinWidth="200"/>
 
-            <!-- Troisième ligne -->
             <Label Content="Description:" Grid.Row="1" Grid.Column="0" Margin="0,10,0,0"/>
             <TextBox TextWrapping="Wrap" Text="{Binding Description}" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Width="Auto" MinWidth="200"/>
 
-
-            <!-- Deuxième ligne -->
             <Label Content="Creation date:" Grid.Row="2" Grid.Column="0" Margin="0,10,0,0"/>
-            <DatePicker Grid.Row="2" Text="{Binding CreationDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd/MM/yyyy}" Grid.Column="1" Margin="0,10,0,124" Width="Auto" MinWidth="200"/>
-
-
+            <DatePicker Grid.Row="2" Text="{Binding CreationDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd/MM/yyyy}" Grid.Column="1" Margin="0,10,0,124" Width="Auto" MinWidth="200"
+            DisplayDateEnd="{x:Static sys:DateTime.Now}"/>
         </Grid>
 
+        <!-- Liste des participants et boutons d'action -->
+        <Grid Grid.Row="1" Margin="20,125,400,39">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <Label Content="Participants" Grid.Row="0" Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,0,5"/>
+            <ListBox ItemsSource="{Binding ParticipantsUsers}" Grid.Row="1" Margin="0,0,0,8">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="310"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{Binding FullName}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                    <TextBlock  Visibility="{c:Binding IsDefault}" Text=" (Creator)"/>
+                                    <TextBlock  Visibility="{c:Binding !IsDefault}" >
+                                        <TextBlock Visibility="{c:Binding IsExpense}">
+                                            <Run Text="("/>
+                                            <Run Text="{Binding Expense}"/>
+                                            <Run Text=" expenses)"/>
+                                        </TextBlock>
+                                    </TextBlock>      
+                                </TextBlock>
+                            </StackPanel>
+                            <Button Command="{Binding DataContext.RemoveParticipant, RelativeSource={RelativeSource AncestorType={x:Type local:AddTricountView}}}"
+                                    CommandParameter="{Binding}" Visibility="{c:Binding !IsDefault}" Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Image Source="/images/trash.png" Width="16" Height="16" />
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-        <!-- Boutons d'action -->
-        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,20,20">
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,5,0,5">
+                <ComboBox ItemsSource="{Binding Users}" DisplayMemberPath="Full_name" SelectedItem="{Binding SelectedParticipant}" Width="292"/>
+                <Button Content="Add" Command="{Binding AddUserCommand}" Margin="10,0,0,0" Width="34"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="70,5,0,5">
+                <Button Content="Add Myself" Command="{Binding AddMySelfCommand}" Width="94" Margin="0,0,10,0"/>
+                <Button Content="Add Everybody" Command="{Binding AddAllUserCommand}" Width="86"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Boutons d'action principaux -->
+        <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,20,20">
             <Button Content="Save" Command="{Binding SaveTricountCommand}" IsDefault="True" Margin="0,0,20,0" Width="75"/>
             <Button Content="Cancel" Command="{Binding CancelTricountCommand}" Width="75"/>
         </StackPanel>
-
-
-        <ListBox ItemsSource="{Binding ParticipantsUsers}" Margin="20,235,400,210">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <!-- Définition des colonnes -->
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Affichage du nom de l'utilisateur -->
-                        <TextBlock Text="{Binding FullName}" Grid.Column="0">
-                    <!-- Style du TextBlock -->
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsDefault}" Value="True">
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        <TextBlock  Visibility="{c:Binding IsDefault}" >(Creator)</TextBlock>
-                              <TextBlock  Visibility="{c:Binding !IsDefault}" >
-                                  <TextBlock Visibility="{c:Binding IsExpense}">
-                                       <Run Text="("/>
- <Run Text="{Binding Expense}"/>
- <Run Text=" expenses)"/>
-                                  </TextBlock>
-     
-  </TextBlock>      
-                        </TextBlock>
-                        <TextBlock Text="                                                                                        " />
-                        <!-- Bouton de suppression -->
-                        <Button Command="{Binding DataContext.RemoveParticipant, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                        CommandParameter="{Binding}" Visibility="{c:Binding !IsDefault}"  Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Image Source="/images/trash.png" Width="16" Height="16" />
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-
-
-        <Label Content="Participants" HorizontalAlignment="Left" FontWeight="Bold" Margin="20,207,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Users}"  DisplayMemberPath="Full_name"  SelectedItem="{Binding SelectedParticipant}" Margin="20,296,0,0" VerticalAlignment="Top" Width="280"/>
-        <Button Content="Add"  Command="{Binding AddUserCommand}" HorizontalAlignment="Left" Margin="310,296,0,0" VerticalAlignment="Top" Height="22" Width="40"/>
-        <Button Content="Add My self"  Command="{Binding AddMySelfCommand}" HorizontalAlignment="Left" Margin="60,323,0,0" VerticalAlignment="Top" Width="94"/>
-        <Button Content="Add Everybody" Command="{Binding AddAllUserCommand}" HorizontalAlignment="Left" Margin="180,323,0,0" VerticalAlignment="Top" Width="95"/>
     </Grid>
-    
 </UserControl>

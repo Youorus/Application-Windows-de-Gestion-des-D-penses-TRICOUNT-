@@ -1,4 +1,5 @@
 ﻿using prbd_2324_a03.Model;
+using prbd_2324_a03.ViewModel;
 using PRBD_Framework;
 using System;
 using System.Collections.Generic;
@@ -41,11 +42,6 @@ namespace prbd_2324_a03.View
                 OpenTab(isNew ? "<New Tricount>" : tricounts.Title, tricounts.Title, () => new AddTricountView(tricounts, isNew)); 
         }
 
-        //private void DoDisplayOperation(Tricounts tricounts, bool isNew) {
-        //    if (tricounts != null)
-        //        OpenTab("Add operation", "Add operation", () => new AddOperationView(tricounts, isNew));
-        //}
-
 
         private void OpenTab(string header, string tag, Func<UserControl> createView) {
             var tab = tabControl.FindByTag(tag);
@@ -65,6 +61,7 @@ namespace prbd_2324_a03.View
              tabControl.CloseByTag(string.IsNullOrEmpty(tricounts.Title) ? "<New Tricount>" : tricounts.Title);
         }
 
+        
 
         private void DoRenameTab(string header) {
             if (tabControl.SelectedItem is TabItem tab) {

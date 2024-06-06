@@ -1,4 +1,5 @@
 ﻿using prbd_2324_a03.Model;
+using prbd_2324_a03.ViewModel;
 using PRBD_Framework;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,20 @@ namespace prbd_2324_a03.View
     /// <summary>
     /// Interaction logic for AddOperationView.xaml
     /// </summary>
-    public partial class AddOperationView 
+    public partial class AddOperationView : DialogWindowBase
     {
-        public AddOperationView() {
+        private readonly AddOperationViewModel _vm;
+        public AddOperationView(Tricounts tricounts, Operations operations, bool IsNew) {
             InitializeComponent();
+            DataContext = _vm = new AddOperationViewModel(tricounts, operations, IsNew);
         }
+
+        private void NumericTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e) {
+            if (!char.IsDigit(e.Text, e.Text.Length - 1)  && e.Text != ",") {
+                e.Handled = true;
+            }
+        }
+
+
     }
 }

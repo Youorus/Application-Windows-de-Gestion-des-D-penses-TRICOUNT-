@@ -42,7 +42,8 @@ namespace prbd_2324_a03.View
             DataContext = _vm;  // Set initial DataContext
 
 
-        } 
+
+        }
         private void EditTricountButton_Click(object sender, RoutedEventArgs e) {
             DataContext = _addTricountVm;  // Set DataContext to AddTricountViewModel
 
@@ -65,5 +66,6 @@ namespace prbd_2324_a03.View
             _vm.IsVisibleOperationTricount = true;
 
         }
+
     }
 }

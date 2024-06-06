@@ -52,11 +52,6 @@ namespace prbd_2324_a03.Model
                 AddError(nameof(Title), "Title already exists");
             }
 
-
-            if (Created_at > DateTime.Now) {
-                AddError(nameof(Created_at), "The Date cannot be in the future");
-            }
-
             return !HasErrors;
         }
 
