@@ -6,8 +6,7 @@ using System.Windows.Input;
 
 namespace prbd_2324_a03.ViewModel
 {
-    public class AddTricountViewModel : ViewModelCommon
-    {
+    public class AddTricountViewModel : ViewModelCommon {
         private readonly int _userId = 1;
 
         private User _selectedParticipant;
@@ -82,6 +81,9 @@ namespace prbd_2324_a03.ViewModel
             });
         }
 
+        private List<User> _removedParticipants = new List<User>();
+
+
         private string _description;
         public string Description {
             get => Tricount?.Description;
@@ -98,6 +100,21 @@ namespace prbd_2324_a03.ViewModel
                 t.Created_at = v;
             });
         }
+
+   
+
+
+
+
+        public void RestoreRemovedParticipants() {
+            foreach (var participant in _removedParticipants) {
+                var vm = new ParticipantsListViewModel(participant, Tricount.Id);
+                ParticipantsUsers.Add(vm);
+                _otherUsers.Remove(participant);
+            }
+            _removedParticipants.Clear(); // Effacer la liste temporaire après la restauration
+        }
+
 
         public override bool Validate() {
             ClearErrors();
@@ -125,6 +142,7 @@ namespace prbd_2324_a03.ViewModel
         }
 
         public override void SaveAction() {
+
             if (IsNew) {
                 var tricount = new Tricounts {
                     Title = Title,
@@ -148,7 +166,7 @@ namespace prbd_2324_a03.ViewModel
                 IsNew = false;
                 NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
                 NotifyColleagues(App.Messages.MSG_CANCEL_TRICOUNT, Tricount);
-            }
+            } 
         }
 
         private void CancelTricount() {
@@ -185,16 +203,32 @@ namespace prbd_2324_a03.ViewModel
             return Tricount != null && (IsNew || Tricount.IsModified);
         }
 
-        private void RemoveParticipantAction(ParticipantsListViewModel participantToRemove) {
+        public void RemoveParticipantAction(ParticipantsListViewModel participantToRemove) {
             if (participantToRemove != null) {
                 var participantToRemoveViewModel = ParticipantsUsers.FirstOrDefault(vm => vm.User == participantToRemove.User);
                 if (participantToRemoveViewModel != null) {
                     ParticipantsUsers.Remove(participantToRemoveViewModel);
                     // Ajoutez ici la logique supplémentaire si nécessaire
                     _otherUsers.Add(participantToRemove.User);
+
+                    // Supprimer le participant du tricount s'il n'est pas nouveau
+                    if (!IsNew) {
+                        var subscriptionToRemove = Context.Subscriptions.FirstOrDefault(s => s.TricountId == Tricount.Id && s.UserId == participantToRemove.User.UserId);
+                        if (subscriptionToRemove != null) {
+                            Context.Subscriptions.Remove(subscriptionToRemove);
+                            Context.SaveChanges();
+                        }
+                    }
+
+                    // Ajouter le participant retiré à la liste temporaire
+                    _removedParticipants.Add(participantToRemove.User);
                 }
             }
         }
+
+
+
+
 
         public AddTricountViewModel(Tricounts tricount, bool isNew) {
             Tricount = tricount;
@@ -204,9 +238,7 @@ namespace prbd_2324_a03.ViewModel
         }
 
         private bool CanSaveAction() {
-            if (IsNew)
-                return !string.IsNullOrEmpty(Title);
-            return Tricount != null && Tricount.IsModified;
+            return IsNew ? !string.IsNullOrEmpty(Title) : Tricount != null  && !HasErrors;
         }
 
         protected override void OnRefreshData() {

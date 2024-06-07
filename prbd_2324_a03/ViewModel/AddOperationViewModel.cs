@@ -20,6 +20,8 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _tricount, value);
         }
 
+        public event Action RequestClose;
+
         private ObservableCollectionFast<User> _allUsers;
         public ObservableCollectionFast<User> AllUsers {
             get => _allUsers;
@@ -47,6 +49,8 @@ namespace prbd_2324_a03.ViewModel
             });
         }
 
+        public string TitleDialogWindows;
+
         private User _currentUser;
         public User ActualUser {
             get => _currentUser;
@@ -56,7 +60,11 @@ namespace prbd_2324_a03.ViewModel
         private bool _isNew;
         public bool IsNew {
             get => _isNew;
-            set => SetProperty(ref _isNew, value);
+            set {
+                SetProperty(ref _isNew, value);
+
+                TitleOperationNameWindows();
+            }
         }
 
         private string _title;
@@ -72,14 +80,32 @@ namespace prbd_2324_a03.ViewModel
         public double Amount {
             get => Operation.Amount;
             set => SetProperty(Operation.Amount, value,Operation, (o, v) => {
-                o.Amount = v; // Si v est null, assignez 0 à la propriété Amount de votre modèle de données
+                AmountValid = v <= 0 || v == 0;
+                o.Amount = v; 
                 UpdateRepartition();
                 Validate();
+                UpdateIsCheckValid();
             });
         }
 
-     
+        private bool _amountValid = true;
+        public bool AmountValid {
+            get => _amountValid;
+            set => SetProperty(ref _amountValid, value);
+        }
 
+        private bool _isCheckValid = true;
+        public bool IsCheckValid {
+            get => _isCheckValid;
+            set => SetProperty(ref _isCheckValid, value);
+        }
+
+
+        private void TitleOperationNameWindows() {
+            TitleDialogWindows = IsNew ? "Add Operation" : "Edit Operation";
+        }
+
+        public DateTime CreationTricountDate { get; set;}
 
 
         public ICommand AddOperation { get; set; }
@@ -127,21 +153,29 @@ namespace prbd_2324_a03.ViewModel
             Operation.Validate();
             AddErrors(Operation.Errors);
 
-           
-        
 
             return !HasErrors;
         }
 
+        private bool CanSaveAction() {
+            if (IsNew)
+                return !string.IsNullOrEmpty(Title) && !AmountValid && !IsCheckValid && !HasErrors;
+            return Operation != null && Operation.IsModified;
+        }
 
 
         public AddOperationViewModel(Tricounts tricount, Operations operation, bool isNew) {
             Operation = operation;
             Tricount = tricount;
             IsNew = isNew;
+
+            CreationTricountDate = Tricount.Created_at;
+
+            Console.WriteLine(CreationTricountDate);
+
             AllUsersRepartition = new ObservableCollectionFast<RepartitionOperationViewModel>();
             OnRefreshData();
-
+            AddOperation = new RelayCommand(AddAction, CanSaveAction);
 
         }
 
@@ -168,6 +202,12 @@ namespace prbd_2324_a03.ViewModel
         }
 
 
+        public void UpdateIsCheckValid() {
+            IsCheckValid = AmountValid == false && AllUsersRepartition.All(user => !user.IsChecked);
+        }
+
+
+
         protected override void OnRefreshData() {
             // Récupérer les utilisateurs par ordre alphabétique, en excluant l'utilisateur admin
             var users = Context.Users
@@ -178,19 +218,41 @@ namespace prbd_2324_a03.ViewModel
             AllUsers = new ObservableCollectionFast<User>(users);
 
             foreach (var user in AllUsers) {
-                var x = new RepartitionOperationViewModel(Operation, user, this);
-                AllUsersRepartition.Add(x);
+                var repartitionVM = new RepartitionOperationViewModel(Operation, user, this);
+                AllUsersRepartition.Add(repartitionVM);
+
+                // Mettre à jour IsChecked et SelectedValue pour chaque utilisateur
+                repartitionVM.IsChecked = Operation.Repartitions.Any(r => r.User == user);
+
+                // Récupérer la répartition associée à cet utilisateur pour cette opération
+                var repartition = Operation.Repartitions.FirstOrDefault(r => r.User == user);
+
+                if (repartition != null) {
+                    repartitionVM.SelectedValue = repartition.Weight;
+                }
+
             }
 
             // Définir l'utilisateur actuel sur le premier utilisateur de la liste
             _currentUser = AllUsers.FirstOrDefault();
 
-            CreationDate = DateTime.Now;
+
+            if (!IsNew) {
+                AmountValid = false;
+            } else {
+                CreationDate = DateTime.Now;
+            }
+
+          
 
             UpdateRepartition();
 
-            AddOperation = new RelayCommand(AddAction, () => !HasErrors);
+         
+
+
         }
+
+
 
         private void AddAction() {
             if (Operation != null) {
@@ -213,6 +275,9 @@ namespace prbd_2324_a03.ViewModel
                 Context.Operations.Add(Operation);
                 Context.SaveChanges();
                 NotifyColleagues(App.Messages.MSG_VIEWTRICOUNT_CHANGED, Tricount);
+
+                NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+                RequestClose?.Invoke();
             }
         }
     

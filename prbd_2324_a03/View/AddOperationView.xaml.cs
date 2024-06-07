@@ -2,6 +2,7 @@
 using prbd_2324_a03.ViewModel;
 using PRBD_Framework;
 using System;
+using Xceed.Wpf.Toolkit;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,8 @@ namespace prbd_2324_a03.View
         public AddOperationView(Tricounts tricounts, Operations operations, bool IsNew) {
             InitializeComponent();
             DataContext = _vm = new AddOperationViewModel(tricounts, operations, IsNew);
+
+            _vm.RequestClose += () => this.Close();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) {
@@ -39,6 +42,18 @@ namespace prbd_2324_a03.View
             }
         }
 
+        private void DoubleUpDown_LostFocus(object sender, RoutedEventArgs e) {
+            var doubleUpDown = sender as DoubleUpDown;
+            if (doubleUpDown != null && string.IsNullOrEmpty(doubleUpDown.Text)) {
+                doubleUpDown.Value = 0; // Mettez à jour la valeur à 0 si le texte est vide
+                _vm.AmountValid = true;
+            }
+        }
 
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            _vm.Operation.Reload();
+            Close();
+            _vm.RaisePropertyChanged();
+        }
     }
 }

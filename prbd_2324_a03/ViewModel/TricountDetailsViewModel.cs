@@ -25,6 +25,13 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+
+        private bool _IsOperation;
+        public bool IsOperation {
+            get => _IsOperation;
+            set => SetProperty(ref _IsOperation, value);
+        }
+     
         private bool _isVisibleDetailsTricount;
         public bool IsVisibleDetailsTricount {
             get => _isVisibleDetailsTricount;
@@ -64,6 +71,20 @@ namespace prbd_2324_a03.ViewModel
            
         }
 
+        public void EditOperation(Operations operation) {
+
+            if (operation == null) {
+                Console.WriteLine("test");
+            }
+
+            App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, operation, false);
+
+        }
+
+        public void UpdateListTricout() {
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+
+        }
         protected override void OnRefreshData() {
             if (Tricount == null) return;
 
@@ -73,10 +94,15 @@ namespace prbd_2324_a03.ViewModel
                                              .Where(o => o.TricountId == Tricount.Id)
                                              .ToList();
 
+          
+
+
             foreach (var operation in operationsTricount) {
                 var viewModel = new OperationCardViewModel(operation);
                 Operations.Add(viewModel);
             }
+
+            IsOperation = Context.Operations.Any(o => o.TricountId == Tricount.Id);
         }
     }
 }

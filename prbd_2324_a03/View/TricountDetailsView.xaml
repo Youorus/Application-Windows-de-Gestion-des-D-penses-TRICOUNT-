@@ -102,8 +102,8 @@
                                 </TextBlock>      
                             </TextBlock>
                         </StackPanel>
-                                <Button Command="{Binding  RemoveParticipant}"
-                                CommandParameter="{Binding}" Visibility="{c:Binding !IsDefault}" Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0">
+                                <Button Click="Remove_Click"
+                                    CommandParameter="{Binding}" Visibility="{c:Binding !IsDefault}" Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                             <Image Visibility="{c:Binding !IsExpense}" Source="/images/trash.png" Width="16" Height="16" />
@@ -128,7 +128,7 @@
 
                 <!-- Boutons d'action principaux -->
                 <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,20,20">
-                    <Button Content="Save" Command="{Binding SaveTricountCommand}" IsDefault="True" Margin="0,0,20,0" Width="75"/>
+                    <Button Content="Save" Click="Save_Click"  IsDefault="True" Margin="0,0,20,0" Width="75"/>
                     <Button Content="Cancel" Click="Cancel_Click" Width="75"/>
                 </StackPanel>
             </Grid>
@@ -151,7 +151,9 @@
                 </TextBlock>
             </StackPanel>
 
-            <ListView ItemsSource="{Binding Operations}" Margin="10,71,315,110">
+
+            <TextBlock  Visibility="{c:Binding !IsOperation}" Margin="80,130,315,110" Text="No Operation" FontSize="30" FontStyle="Italic"/>
+            <ListView Visibility="{c:Binding IsOperation}" x:Name="listView" ItemsSource="{Binding Operations}" MouseDoubleClick="ListView_MouseDoubleClick" Margin="10,71,315,110">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>

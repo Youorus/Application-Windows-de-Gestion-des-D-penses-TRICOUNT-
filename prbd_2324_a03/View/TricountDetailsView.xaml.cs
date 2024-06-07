@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit.Primitives;
 
 namespace prbd_2324_a03.View
 {
@@ -47,14 +48,31 @@ namespace prbd_2324_a03.View
         private void EditTricountButton_Click(object sender, RoutedEventArgs e) {
             DataContext = _addTricountVm;  // Set DataContext to AddTricountViewModel
 
+ 
+
         _addTricountVm.IsVisibleOperationTricount = false;
 
         }
 
 
+        private void Remove_Click(object sender, RoutedEventArgs e) {
+
+            var button = sender as Button;
+            if (button != null) {
+                var participant = button.CommandParameter as ParticipantsListViewModel; // Cast to the appropriate type
+                if (participant != null) {
+                    // Maintenant, vous avez l'objet participant que vous pouvez utiliser pour le supprimer
+                    _addTricountVm.RemoveParticipantAction(participant);
+                }
+            }
+        }
+
+
         private void Cancel_Click(object sender, RoutedEventArgs e) {
 
-           
+
+
+            _addTricountVm.RestoreRemovedParticipants();
             _addTricountVm.Tricount.Reload();
             _addTricountVm.RaisePropertyChanged();
 
@@ -66,6 +84,34 @@ namespace prbd_2324_a03.View
             _vm.IsVisibleOperationTricount = true;
 
         }
+
+        private void Save_Click(object sender, RoutedEventArgs e) {
+
+            DataContext = _vm;
+
+            _vm.UpdateListTricout();
+
+            // Rétablir la visibilité appropriée
+            _vm.IsVisibleDetailsTricount = false;
+            _vm.IsVisibleOperationTricount = true;
+
+        }
+
+
+
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+
+           
+
+            if (listView.SelectedItem != null) {
+                var operation = listView.SelectedItem as OperationCardViewModel;
+
+                _vm.EditOperation(operation.Operation);
+            }
+
+         
+        }
+
 
     }
 }

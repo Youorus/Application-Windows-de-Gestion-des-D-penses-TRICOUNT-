@@ -24,7 +24,9 @@ namespace prbd_2324_a03.ViewModel
             set {
                 SetProperty(ref _isChecked, value);
                 // Mettre à jour la propriété ShowAmount en fonction de l'état de la case à cocher
+                initalizeSelectValue();
                 ShowAmount = _isChecked;
+                addOperationViewModel.UpdateIsCheckValid();
             }
         }
 
@@ -57,6 +59,12 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+        private void initalizeSelectValue() {
+            if (IsChecked) {
+                SelectedValue += 1;
+            }else { SelectedValue = 0; }
+        }
+
 
 
         public string Fullname { get; set; }
@@ -70,6 +78,8 @@ namespace prbd_2324_a03.ViewModel
         protected override void OnRefreshData() { 
         
             Fullname = SelectedParticipant.Full_name;
+
+           
 
         }
 

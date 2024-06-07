@@ -7,13 +7,15 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:local="clr-namespace:prbd_2324_a03.View"
+                      xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
                     mc:Ignorable="d"
                     xmlns:vm="clr-namespace:prbd_2324_a03.ViewModel"
-                    Title="DialogView"
                     Height="500"
                     Width="350"
                     d:DataContext="{d:DesignInstance vm:AddOperationViewModel}"
+                      Title="Add Operation"
                     WindowStartupLocation="CenterScreen">
+    
     <!-- Grille principale -->
     <Grid Margin="20,20,20,11">
         <Grid.ColumnDefinitions>
@@ -40,9 +42,8 @@
         <Label Content="Amount:" Grid.Row="1" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,10"/>
         <xctk:DoubleUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="26" Margin="0,0,0,10"
                            Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
-                           Minimum="0" FormatString="0.00€"
-                           ShowButtonSpinner="False" TextAlignment="Left" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Red" VerticalAlignment="Center" Height="13" Margin="0,37,0,10"
+                           Minimum="0" FormatString="0.00€" ShowButtonSpinner="False"  LostFocus="DoubleUpDown_LostFocus" TextAlignment="Left" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Visibility="{c:Binding AmountValid}" Foreground="Red" VerticalAlignment="Center" Height="13" Margin="0,37,0,10"
                    Text="minimum 1 cent"
         />
 
@@ -52,7 +53,7 @@
 
         <!-- Quatrième rangée -->
         <Label Content="Date:" Grid.Row="3" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
-        <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" SelectedDate="{Binding CreationDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd/MM/yyyy}" DisplayDateEnd="{x:Static sys:DateTime.Now}"/>
+        <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" SelectedDate="{Binding CreationDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd/MM/yyyy}"   DisplayDateStart="{Binding CreationTricountDate}"  DisplayDateEnd="{x:Static sys:DateTime.Now}"/>
 
         <!-- Cinquième rangée - ListView -->
         <ListBox Grid.Row="4" Grid.ColumnSpan="2" ItemsSource="{Binding  AllUsersRepartition}" Margin="0,5,0,5" BorderThickness="0">
@@ -83,14 +84,15 @@
         </ListBox>
 
         <!-- TextBlock à la fin de la ListBox -->
-        <TextBlock Grid.Row="4" Grid.RowSpan="2" Foreground="Red" VerticalAlignment="Top" Height="16" Margin="10,170,48,0"
+        <TextBlock Grid.Row="4" Grid.RowSpan="2" Visibility="{c:Binding IsCheckValid}" Foreground="Red" VerticalAlignment="Top" Height="16" Margin="10,170,48,0"
                    Text="You must check at least one participant" Grid.ColumnSpan="2"
                    />
 
         <!-- Sixième rangée - Boutons -->
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Delete" Visibility="{c:Binding !IsNew}" Command="{Binding AddOperation}" Height="20" Width="50" Margin="5"/>
             <Button Content="Add" Command="{Binding AddOperation}" Height="20" Width="50" Margin="5"/>
-            <Button Content="Cancel" Command="{Binding CancelOperation}" Height="20" Width="50" Margin="5"/>
+            <Button Content="Cancel" Command="{Binding CancelOperation}" Height="20" Width="50" Margin="5" Click="Button_Click"/>
         </StackPanel>
     </Grid>
 </f:DialogWindowBase>
