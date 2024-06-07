@@ -10,7 +10,7 @@
       mc:Ignorable="d" 
      >
 
-    <Border Background="{Binding Colors}" CornerRadius="10" Width="150" Height="170" Padding="5">
+    <Border Background="{Binding Colors}" CornerRadius="10" Width="160" Height="175" Padding="5">
         <Grid>
             <!-- Contenu principal -->
             <StackPanel>
@@ -71,10 +71,10 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Total Expense -->
-                <TextBlock FontSize="9" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,111,88,0">
+                <TextBlock FontSize="9" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,111,70,0">
                     <Run Text="Total Expenses: "/>
                 </TextBlock>
-                <TextBlock FontSize="9" Grid.Column="2" Margin="39,111,10,0">
+                <TextBlock FontSize="9" Grid.Column="2" Margin="39,111,0,0">
                     <Run Text="{Binding ExpenseTricount, StringFormat={}{0:N2}}"/>
                     <Run Text=" €"/>
                 </TextBlock>

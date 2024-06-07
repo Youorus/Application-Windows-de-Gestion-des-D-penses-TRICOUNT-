@@ -90,7 +90,7 @@
 
         <!-- Sixième rangée - Boutons -->
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Delete" Visibility="{c:Binding !IsNew}" Command="{Binding AddOperation}" Height="20" Width="50" Margin="5"/>
+            <Button Content="Delete" Visibility="{c:Binding !IsNew}" Command="{Binding DeleteOperationCommand}" Height="20" Width="50" Margin="5"/>
             <Button Content="Add" Command="{Binding AddOperation}" Height="20" Width="50" Margin="5"/>
             <Button Content="Cancel" Command="{Binding CancelOperation}" Height="20" Width="50" Margin="5" Click="Button_Click"/>
         </StackPanel>

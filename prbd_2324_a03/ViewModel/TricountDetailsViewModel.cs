@@ -25,6 +25,11 @@ namespace prbd_2324_a03.ViewModel
             }
         }
 
+        private bool _isEdit;
+        public bool IsEdit {
+            get => _isEdit;
+            set => SetProperty(ref _isEdit, value);
+        }
 
         private bool _IsOperation;
         public bool IsOperation {
@@ -85,16 +90,21 @@ namespace prbd_2324_a03.ViewModel
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
 
         }
+
+       
+
         protected override void OnRefreshData() {
             if (Tricount == null) return;
 
             Operations.Clear();
             var operationsTricount = Context.Operations
-                                             .Include(o => o.Creator)
-                                             .Where(o => o.TricountId == Tricount.Id)
-                                             .ToList();
+     .Include(o => o.Creator)
+     .Where(o => o.TricountId == Tricount.Id)
+     .OrderBy(o => o) // Trier par date en ordre croissant
+     .ToList();
 
-          
+
+
 
 
             foreach (var operation in operationsTricount) {
@@ -103,6 +113,8 @@ namespace prbd_2324_a03.ViewModel
             }
 
             IsOperation = Context.Operations.Any(o => o.TricountId == Tricount.Id);
+
+            IsEdit = Context.Tricounts.Any(t => t.Creator == CurrentUser.UserId) || Context.Users.Any(u => u.Full_name == "Admin");
         }
     }
 }

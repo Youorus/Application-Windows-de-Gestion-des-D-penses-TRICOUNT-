@@ -109,6 +109,8 @@ namespace prbd_2324_a03.ViewModel
 
         public ICommand AddOperation { get; set; }
 
+        public event Func<bool> DeleteOperations;
+
 
         private bool _isChecked;
         public bool IsChecked {
@@ -161,7 +163,7 @@ namespace prbd_2324_a03.ViewModel
                 return !string.IsNullOrEmpty(Title) && !AmountValid && !IsCheckValid && !HasErrors;
             return Operation != null && Operation.IsModified;
         }
-
+        public ICommand DeleteOperationCommand { get; set; }
 
         public AddOperationViewModel(Tricounts tricount, Operations operation, bool isNew) {
             Operation = operation;
@@ -171,6 +173,8 @@ namespace prbd_2324_a03.ViewModel
             CreationTricountDate = Tricount.Created_at;
 
             Console.WriteLine(CreationTricountDate);
+
+            DeleteOperationCommand = new RelayCommand(DeleteOperation);
 
             AllUsersRepartition = new ObservableCollectionFast<RepartitionOperationViewModel>();
             OnRefreshData();
@@ -251,6 +255,14 @@ namespace prbd_2324_a03.ViewModel
 
         }
 
+
+        public void DeleteOperation() {
+            if (!(DeleteOperations?.Invoke() ?? false)) return;
+
+            Operation.Delete();
+            NotifyColleagues(App.Messages.MSG_CANCEL_TRICOUNT, Tricount);
+            NotifyColleagues(App.Messages.MSG_VIEWTRICOUNT_CHANGED, Tricount);
+        }
 
 
         private void AddAction() {

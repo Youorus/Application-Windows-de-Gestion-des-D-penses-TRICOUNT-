@@ -63,7 +63,7 @@
                     <TextBlock Text=" Null balance "/>
                     <Border Width="30"  Height="10" Background="LightGreen"  Margin="5"/>
                     <TextBlock Text=" Positive Balance "/>
-                    <Border Width="30"  Height="10" Background="LightCoral"  Margin="5"/>
+                    <Border Width="30"  Height="10" Background="LightPink"  Margin="5"/>
                     <TextBlock Text=" Negative Balance "/>
                 </StackPanel>
             </Grid>

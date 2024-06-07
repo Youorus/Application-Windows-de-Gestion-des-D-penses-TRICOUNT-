@@ -48,6 +48,17 @@ public class Operations : EntityBase<PridContext>
         return !HasErrors;
     }
 
+    public void Delete() {
+        var repar = Context.Repartitions.Where(r => r.OperationId == this.Id).ToList();
+
+        foreach (var item in repar) {
+            Context.Repartitions.Remove(item);
+        }
+
+        Context.Operations.Remove(this);
+        Context.SaveChanges();
+    }
+
 }
 
 

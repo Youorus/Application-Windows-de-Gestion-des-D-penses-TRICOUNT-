@@ -124,7 +124,7 @@ namespace prbd_2324_a03.ViewModel
         }
 
         public void UsersList() {
-            var usersList = Context.Users.Where(user => user.UserId != _userId).ToList();
+            var usersList = Context.Users.Where(user => user.UserId != _userId).OrderBy(user => user.Full_name).ToList();
             Users = new ObservableCollectionFast<User>(usersList ?? new List<User>());
         }
 
@@ -132,11 +132,13 @@ namespace prbd_2324_a03.ViewModel
             var allUsersList = Context.Users.ToList();
             AllUsers = new ObservableCollectionFast<User>(allUsersList ?? new List<User>());
         }
+     
 
         private void AddAction() {
             var selectItem = new ParticipantsListViewModel(SelectedParticipant, Tricount.Id);
             if (SelectedParticipant != null && !ParticipantsUsers.Contains(selectItem)) {
                 ParticipantsUsers.Add(selectItem);
+                Context.Subscriptions.Add(new Subscriptions { UserId = selectItem.User.UserId, TricountId = Tricount.Id });
                 Users.Remove(SelectedParticipant);
             }
         }

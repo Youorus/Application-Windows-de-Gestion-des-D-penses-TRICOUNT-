@@ -30,6 +30,10 @@ namespace prbd_2324_a03.View
             DataContext = _vm = new AddOperationViewModel(tricounts, operations, IsNew);
 
             _vm.RequestClose += () => this.Close();
+
+
+            _vm.DeleteOperations += () => App.Confirm("You're about to delete this Operation\nDo you confirm?");
+
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) {

@@ -79,7 +79,7 @@ namespace prbd_2324_a03.ViewModel
 
         private void TricountCardColor() {
             if (MyBalanceTricount < 0) {
-                Colors = "LightCoral";
+                Colors = "LightPink";
             } else if (MyBalanceTricount > 0) {
                 Colors = "LightGreen";
             }else { Colors = "LightGray";
