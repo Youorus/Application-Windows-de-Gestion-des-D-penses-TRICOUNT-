@@ -13,7 +13,6 @@ namespace prbd_2324_a03.ViewModel
 {
     public class AddOperationViewModel : DialogViewModelBase<Operations, PridContext> {
 
-        private readonly int _userId = 1;
         private Tricounts _tricount;
         public Tricounts Tricount {
             get => _tricount;

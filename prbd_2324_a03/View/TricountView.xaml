@@ -24,9 +24,9 @@
         </Grid.RowDefinitions>
 
         <Menu>
-            <MenuItem Header="Logout"/>
-            <MenuItem Header="Reload"/>
-            <MenuItem Header="Reset"/>
+            <MenuItem Header="Logout" Click="MenuLogout_Click"/>
+            <MenuItem Header="Reload" Command="{Binding ReloadDataCommand}"/>
+            <MenuItem Header="Reset" Command="{Binding ResetDataCommand}"/>
         </Menu>
 
         <f:MyTabControl HasCloseButton="True" x:Name="tabControl" Margin="10" Grid.Row="1">

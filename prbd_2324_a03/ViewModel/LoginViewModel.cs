@@ -9,6 +9,11 @@ public class LoginViewModel : ViewModelCommon
 {
     public ICommand LoginCommand { get; set; }
 
+    public ICommand LoginBenoit { get; set; }
+    public ICommand LoginBoris { get; set; }
+    public ICommand LoginXavier { get; set; }
+    public ICommand LoginAdmin { get; set; }
+
     private string _email;
 
     public string Email {
@@ -48,6 +53,11 @@ public class LoginViewModel : ViewModelCommon
     public LoginViewModel() {
         LoginCommand = new RelayCommand(LoginAction,
             () => _email != null && _password != null && !HasErrors);
+
+        LoginBoris = new RelayCommand(Log1);
+        LoginBenoit = new RelayCommand(Log2);
+        LoginXavier = new RelayCommand(Log3);
+        LoginAdmin = new RelayCommand(Log4);
     }
 
     private void LoginAction() {
@@ -60,5 +70,37 @@ public class LoginViewModel : ViewModelCommon
 
 
     protected override void OnRefreshData() {
+        
     }
+
+    private void Log1() {
+        var user1 = Context.Users.FirstOrDefault(x => x.UserId == 1);
+
+        NotifyColleagues(App.Messages.MSG_LOGIN, user1);
+
+    }
+
+    private void Log2() {
+        var user1 = Context.Users.FirstOrDefault(x => x.UserId == 2);
+
+        NotifyColleagues(App.Messages.MSG_LOGIN, user1);
+
+    }
+
+    private void Log3() {
+        var user1 = Context.Users.FirstOrDefault(x => x.UserId == 3);
+
+        NotifyColleagues(App.Messages.MSG_LOGIN, user1);
+
+    }
+
+    private void Log4() {
+        var user1 = Context.Users.FirstOrDefault(x => x.UserId == 4);
+
+        NotifyColleagues(App.Messages.MSG_LOGIN, user1);
+
+    }
+
+    
+
 }

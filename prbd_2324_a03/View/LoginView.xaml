@@ -62,16 +62,16 @@
 
         <!-- Add the buttons on the fifth row -->
         <DockPanel Grid.Row="6" Grid.ColumnSpan="3" HorizontalAlignment="Center">
-            <Button Content="Login as Benoit (User)" Width="200" Margin="5"/>
+            <Button Content="Login as Benoit (User)" Command="{Binding LoginBenoit}" Width="200" Margin="5"/>
         </DockPanel>
-        <DockPanel Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Content="Login as Boris (User)" Width="200" Margin="5"/>
+        <DockPanel Grid.Row="7" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
+            <Button Content="Login as Boris (User)" Command="{Binding LoginBoris}" Width="200" Margin="5"/>
         </DockPanel>
-        <DockPanel Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Content="Login as Xavier (User)" Width="200" Margin="5"/>
+        <DockPanel Grid.Row="8" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
+            <Button Content="Login as Xavier (User)" Command="{Binding LoginXavier}" Width="200" Margin="5"/>
         </DockPanel>
-        <DockPanel Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Content="Login as Admin (Admin)" Width="200" Margin="5"/>
+        <DockPanel Grid.Row="9" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
+            <Button Content="Login as Admin (Admin)" Command="{Binding LoginAdmin}" Width="200" Margin="5"/>
         </DockPanel>
 
     </Grid>

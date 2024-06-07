@@ -8,9 +8,9 @@ namespace prbd_2324_a03.ViewModel
 {
     public class ListTricountViewModel : ViewModelCommon
     {
-        int userId = 1;
+        private readonly int _userId = CurrentUser.UserId;
 
-        public string TitleWindows { get; set; }
+      
 
         public ICommand NewTricount { get; set; }
         public ICommand TricountDetailsView { get; set; }
@@ -30,11 +30,11 @@ namespace prbd_2324_a03.ViewModel
         protected override void OnRefreshData() {
             Tricounts.Clear();
             var tricountsCreatedByUser = Context.Tricounts
-         .Where(t => t.Creator == userId)
+         .Where(t => t.Creator == CurrentUser.UserId)
          .OrderByDescending(t => t.Created_at);
 
             var tricountsParticipatedByUser = Context.Tricounts
-       .Where(t => t.Subscriptions.Any(s => s.UserId == userId))
+       .Where(t => t.Subscriptions.Any(s => s.UserId == CurrentUser.UserId))
        .OrderByDescending(t => t.Created_at);
 
 
@@ -48,16 +48,8 @@ namespace prbd_2324_a03.ViewModel
                 Tricounts.Add(viewModel);
             }
 
-            TitleWindows = GetEmailUser();
         }
 
-        public string GetEmailUser() {
-            var email = Context.Users
-                .Where(u => u.UserId == userId)
-                .Select(u => u.Mail)
-                .FirstOrDefault();
-
-            return $"My Tricount ({email})";
-        }
+       
     }
 }

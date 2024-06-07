@@ -7,7 +7,7 @@ using System.Windows.Input;
 namespace prbd_2324_a03.ViewModel
 {
     public class AddTricountViewModel : ViewModelCommon {
-        private readonly int _userId = 1;
+        private readonly int _userId = CurrentUser.UserId;
 
         private User _selectedParticipant;
         public User SelectedParticipant {

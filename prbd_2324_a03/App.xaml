@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:m="clr-namespace:prbd_2324_a03.Model"
              xmlns:vm="clr-namespace:prbd_2324_a03.ViewModel"
-             StartupUri="View/TricountView.xaml"
+             StartupUri="View/LoginView.xaml"
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework">
     <Application.Resources>
         <ResourceDictionary>

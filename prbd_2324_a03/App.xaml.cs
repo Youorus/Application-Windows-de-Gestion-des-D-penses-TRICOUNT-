@@ -20,7 +20,9 @@ public partial class App : ApplicationBase<User, PridContext>
         MSG_TRICOUNT_CHANGED,
         MSG_DISPLAY_TRICOUNT,
         MSG_DISPLAY_MEMBER,
+        MSG_LOGOUT,
         MSG_CLOSE_TAB,
+        MSG_RESET,
         MSG_LOGIN
     } 
 
@@ -41,7 +43,23 @@ public partial class App : ApplicationBase<User, PridContext>
     protected override void OnStartup(StartupEventArgs e) {
         PrepareDatabase();
         TestQueries();
-        
+
+
+        Register<User>(this, Messages.MSG_LOGIN, User => {
+            Login(User);
+            NavigateTo<TricountViewModel, User, PridContext>();
+        });
+
+        Register(this, Messages.MSG_LOGOUT, () => {
+            Logout();
+            NavigateTo<LoginViewModel, User, PridContext>();
+        });
+
+        Register(this, Messages.MSG_RESET, () => {
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+        });
+
     }
 
     private static void PrepareDatabase() {
@@ -51,7 +69,7 @@ public partial class App : ApplicationBase<User, PridContext>
 
         // Cold start
         Console.Write("Cold starting database... ");
-        Context.Users.Find(1);
+      
         Console.WriteLine("done");
     }
 

@@ -8,7 +8,8 @@ namespace prbd_2324_a03.ViewModel
     public class TricountCardViewModel : ViewModelCommon
     {
         private Tricounts _tricount;
-        public int userId = 1;
+        private readonly int userId = CurrentUser.UserId;
+
 
         public DateTime LastOperationDate { get; set; }
         public int CountUser { get; set; }

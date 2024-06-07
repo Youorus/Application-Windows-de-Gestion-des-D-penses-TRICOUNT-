@@ -9,7 +9,7 @@ namespace prbd_2324_a03.ViewModel
 {
     public class ParticipantsListViewModel : ViewModelCommon {
 
-        private readonly int _userId = 1;
+        private readonly int _userId = CurrentUser.UserId;
 
 
         private User _user;

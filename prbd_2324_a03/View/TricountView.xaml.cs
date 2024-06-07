@@ -51,6 +51,10 @@ namespace prbd_2324_a03.View
                 tabControl.SetFocus(tab);
         }
 
+        private void MenuLogout_Click(object sender, System.Windows.RoutedEventArgs e) {
+            NotifyColleagues(App.Messages.MSG_LOGOUT);
+        }
+
         private void DoDisplayTricountDetails(Tricounts tricounts) {
             if (tricounts != null)
             
