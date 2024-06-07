@@ -5,15 +5,16 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                   xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:local="clr-namespace:prbd_2324_a03.View"
                     mc:Ignorable="d"
                     xmlns:vm="clr-namespace:prbd_2324_a03.ViewModel"
                     Title="DialogView"
-                    Height="410"
-                    Width="300"
+                    Height="500"
+                    Width="350"
                     d:DataContext="{d:DesignInstance vm:AddOperationViewModel}"
                     WindowStartupLocation="CenterScreen">
+    <!-- Grille principale -->
     <Grid Margin="20,20,20,11">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" MinWidth="58"/>
@@ -26,24 +27,24 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Ajout d'une rangée pour les boutons -->
         </Grid.RowDefinitions>
 
         <!-- Première rangée -->
         <Label x:Name="label" Content="Title:" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,26"/>
         <TextBox TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Height="26" Margin="0,0,0,5"/>
+        <TextBox TextWrapping="Wrap" Visibility="Hidden" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Height="26" Margin="0,0,0,5"/>
 
         <!-- Deuxième rangée -->
         <Label Content="Amount:" Grid.Row="1" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,10"/>
         <xctk:DoubleUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="26" Margin="0,0,0,10"
-                   Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
-                   Minimum="0" FormatString="0.00€"
-                   ShowButtonSpinner="False" TextAlignment="Left" />
-
-
-
-
-
-
+                           Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
+                           Minimum="0" FormatString="0.00€"
+                           ShowButtonSpinner="False" TextAlignment="Left" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Red" VerticalAlignment="Center" Height="13" Margin="0,37,0,10"
+                   Text="minimum 1 cent"
+        />
 
         <!-- Troisième rangée -->
         <Label Content="Initiator:" Grid.Row="2" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
@@ -54,8 +55,8 @@
         <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" SelectedDate="{Binding CreationDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd/MM/yyyy}" DisplayDateEnd="{x:Static sys:DateTime.Now}"/>
 
         <!-- Cinquième rangée - ListView -->
-        <ListView Grid.Row="4" Grid.ColumnSpan="2" ItemsSource="{Binding  AllUsersRepartition}" Margin="0,5,0,5" BorderThickness="0">
-            <ListView.Resources>
+        <ListBox Grid.Row="4" Grid.ColumnSpan="2" ItemsSource="{Binding  AllUsersRepartition}" Margin="0,5,0,5" BorderThickness="0">
+            <ListBox.Resources>
                 <!-- Disable the mouse over effect -->
                 <Style TargetType="ListViewItem">
                     <Setter Property="Background" Value="Transparent"/>
@@ -68,21 +69,28 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-            </ListView.Resources>
-            <ListView.ItemsPanel>
+            </ListBox.Resources>
+            <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:RepartitionOperationView />
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-        <!-- Boutons -->
-        <Button Grid.Row="5" Grid.Column="1" Content="Add" HorizontalAlignment="Left" Height="20" Width="50" VerticalAlignment="Center" Margin="72,0,0,0"/>
-        <Button Grid.Row="5" Grid.Column="1" Content="Cancel" HorizontalAlignment="Left" Margin="131,0,0,0" Height="20" Width="50" VerticalAlignment="Center"/>
+        <!-- TextBlock à la fin de la ListBox -->
+        <TextBlock Grid.Row="4" Grid.RowSpan="2" Foreground="Red" VerticalAlignment="Top" Height="16" Margin="10,170,48,0"
+                   Text="You must check at least one participant" Grid.ColumnSpan="2"
+                   />
+
+        <!-- Sixième rangée - Boutons -->
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Add" Command="{Binding AddOperation}" Height="20" Width="50" Margin="5"/>
+            <Button Content="Cancel" Command="{Binding CancelOperation}" Height="20" Width="50" Margin="5"/>
+        </StackPanel>
     </Grid>
 </f:DialogWindowBase>

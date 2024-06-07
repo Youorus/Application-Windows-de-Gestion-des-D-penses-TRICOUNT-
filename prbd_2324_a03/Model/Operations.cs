@@ -44,9 +44,7 @@ public class Operations : EntityBase<PridContext>
             AddError(nameof(Title), "Title is required");
         } else if (Context.Operations.Any(o => o.Title == Title)) {
             AddError(nameof(Title), "Title already exists");
-        } else if (Amount <= 0) { 
-            AddError(nameof(Amount), "minimum 1 cent");
-        }
+        } 
 
         return !HasErrors;
     }

@@ -7,11 +7,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace prbd_2324_a03.ViewModel
 {
-    public class AddOperationViewModel : DialogViewModelBase<Operations, PridContext>
-    {
+    public class AddOperationViewModel : DialogViewModelBase<Operations, PridContext> {
 
         private readonly int _userId = 1;
         private Tricounts _tricount;
@@ -71,15 +71,21 @@ namespace prbd_2324_a03.ViewModel
         private double _amount;
         public double Amount {
             get => Operation.Amount;
-            set => SetProperty(Operation.Amount, value, Operation, (o, v) => {
+            set => SetProperty(Operation.Amount, value,Operation, (o, v) => {
                 o.Amount = v; // Si v est null, assignez 0 à la propriété Amount de votre modèle de données
                 UpdateRepartition();
                 Validate();
             });
         }
 
+     
 
-         private bool _isChecked;
+
+
+        public ICommand AddOperation { get; set; }
+
+
+        private bool _isChecked;
         public bool IsChecked {
             get => _isChecked;
             set {
@@ -114,25 +120,47 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _selectedValue, value);
         }
 
-       
+
 
         public override bool Validate() {
             ClearErrors();
             Operation.Validate();
             AddErrors(Operation.Errors);
+
+           
+        
+
             return !HasErrors;
         }
 
-        public AddOperationViewModel(Tricounts tricount, Operations operation,bool isNew) {
-           Operation = operation;
+
+
+        public AddOperationViewModel(Tricounts tricount, Operations operation, bool isNew) {
+            Operation = operation;
             Tricount = tricount;
             IsNew = isNew;
             AllUsersRepartition = new ObservableCollectionFast<RepartitionOperationViewModel>();
             OnRefreshData();
+
+
         }
 
         public void UpdateRepartition() {
+            if (Operation == null || Amount <= 0) {
+                foreach (var userRepartition in AllUsersRepartition) {
+                    userRepartition.CalculatedAmount = 0;
+                }
+                return;
+            }
+
             double totalWeight = AllUsersRepartition.Sum(u => u.SelectedValue);
+            if (totalWeight == 0) {
+                foreach (var userRepartition in AllUsersRepartition) {
+                    userRepartition.CalculatedAmount = 0;
+                }
+                return;
+            }
+
             double totalAmount = Amount; // Assuming Amount is the total expense
             foreach (var userRepartition in AllUsersRepartition) {
                 userRepartition.CalculatedAmount = (userRepartition.SelectedValue / totalWeight) * totalAmount;
@@ -159,7 +187,34 @@ namespace prbd_2324_a03.ViewModel
 
             CreationDate = DateTime.Now;
 
-            UpdateRepartition();    
+            UpdateRepartition();
+
+            AddOperation = new RelayCommand(AddAction, () => !HasErrors);
         }
-    }
+
+        private void AddAction() {
+            if (Operation != null) {
+                Operation.Tricount = Tricount;
+                Operation.Creator = ActualUser;
+                Operation.OperationDate = CreationDate;
+
+                // Ajout des répartitions
+                foreach (var repartitionVM in AllUsersRepartition) {
+                    if (repartitionVM.IsChecked) {
+                        var repartition = new Repartitions {
+                            Operations = Operation,
+                            User = repartitionVM.SelectedParticipant,
+                            Weight = repartitionVM.SelectedValue
+                        };
+                        Operation.Repartitions.Add(repartition);
+                    }
+                }
+
+                Context.Operations.Add(Operation);
+                Context.SaveChanges();
+                NotifyColleagues(App.Messages.MSG_VIEWTRICOUNT_CHANGED, Tricount);
+            }
+        }
+    
+}
 }

@@ -47,6 +47,8 @@ namespace prbd_2324_a03.ViewModel
 
             DeleteTricountCommand = new RelayCommand(DeleteTricountAction);
             AddOperationTricountCommand = new RelayCommand(AddOperation);
+
+            Register<Tricounts>(App.Messages.MSG_VIEWTRICOUNT_CHANGED, tricount => OnRefreshData());
         }
 
         private void DeleteTricountAction() {

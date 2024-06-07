@@ -29,9 +29,13 @@ namespace prbd_2324_a03.View
             DataContext = _vm = new AddOperationViewModel(tricounts, operations, IsNew);
         }
 
-        private void NumericTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e) {
-            if (!char.IsDigit(e.Text, e.Text.Length - 1)  && e.Text != ",") {
-                e.Handled = true;
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) {
+            foreach (char c in e.Text) {
+                if (!char.IsDigit(c) && c != '.' && c != ',') // Permet également les décimales
+                {
+                    e.Handled = true;
+                    return;
+                }
             }
         }
 

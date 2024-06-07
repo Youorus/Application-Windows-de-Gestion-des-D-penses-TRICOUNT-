@@ -18,7 +18,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <CheckBox Content="CheckBox" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="0,9.5,0,1" Width="18" Grid.Column="0"/>
-        <TextBox HorizontalAlignment="Left" FontSize="12" Margin="3,8,0,0" BorderBrush="Transparent" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding Fullname }" VerticalAlignment="Top" Width="40" Height="16" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" FontSize="12" Margin="3,8,0,0"  TextWrapping="Wrap" Text="{Binding Fullname }" VerticalAlignment="Top" Width="40" Height="16" Grid.Column="1"/>
         <xctk:IntegerUpDown VerticalAlignment="Top" Width="44" HorizontalAlignment="Left" 
                      Minimum="0" Maximum="100" Margin="35,8,0,0" Height="20" Grid.Column="2"
                      Value="{Binding SelectedValue, UpdateSourceTrigger=PropertyChanged}" />
