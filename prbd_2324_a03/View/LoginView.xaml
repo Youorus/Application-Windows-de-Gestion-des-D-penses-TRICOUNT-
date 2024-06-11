@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Login" WindowStartupLocation="CenterScreen"
         FocusManager.FocusedElement="{Binding ElementName=txtPseudo}" ResizeMode="NoResize"
-        Width="260" Height="325"
+        Width="260" Height="360"
         SizeToContent="WidthAndHeight" >
     <Window.DataContext>
         <vm:LoginViewModel x:Name="vm"/>
@@ -20,6 +20,7 @@
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -71,6 +72,9 @@
             <Button Content="Login as Xavier (User)" Command="{Binding LoginXavier}" Width="200" Margin="5"/>
         </DockPanel>
         <DockPanel Grid.Row="9" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
+            <Button Content="Login as Marc (User)" Command="{Binding LoginMarc}" Width="200" Margin="5"/>
+        </DockPanel>
+        <DockPanel Grid.Row="10" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
             <Button Content="Login as Admin (Admin)" Command="{Binding LoginAdmin}" Width="200" Margin="5"/>
         </DockPanel>
 

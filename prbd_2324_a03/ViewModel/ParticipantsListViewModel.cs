@@ -18,10 +18,10 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _user, value);
         }
 
-        private int _tricountId;
-        public int TricountId {
-            get => _tricountId;
-            set => SetProperty(ref _tricountId, value);
+        private Tricounts _tricount;
+        public Tricounts Tricount {
+            get => _tricount;
+            set => SetProperty(ref _tricount, value);
         }
 
         private string _name;
@@ -49,9 +49,9 @@ namespace prbd_2324_a03.ViewModel
         }
 
 
-        public ParticipantsListViewModel(User user, int Tricount) {
+        public ParticipantsListViewModel(User user, Tricounts tricounts) {
             User = user;
-            TricountId = Tricount;
+            Tricount = tricounts;
             OnRefreshData();
         }
 
@@ -71,7 +71,7 @@ namespace prbd_2324_a03.ViewModel
         }
 
         private void ExpenseUser() {
-            Expense = Context.Operations.Where(o => o.TricountId == TricountId && (o.InitiatorId == User.UserId || o.Repartitions.Any(r => r.UserId == User.UserId))).Count();
+            Expense = Context.Operations.Where(o => o.TricountId == Tricount.Id && (o.InitiatorId == User.UserId || o.Repartitions.Any(r => r.UserId == User.UserId))).Count();
 
 
             if (Expense != 0) {

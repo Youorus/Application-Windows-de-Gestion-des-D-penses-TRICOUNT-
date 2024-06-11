@@ -37,13 +37,14 @@
                 <Run Text="Created by"/>
                 <Run FontWeight="Bold" Text="{Binding FullName}"/>
                 <Run Text=" on"/>
-                <Run Text="{Binding CreationDate,  StringFormat=dd/MM/yyyy}"/>
+                <Run Text="{Binding CreationDate,  StringFormat='{}{0:dd/MM/yyyy}'}"/>
             </TextBlock>
         </StackPanel>
 
         <!-- Entrées utilisateur -->
         <Grid Grid.Row="1" Margin="20,0,20,10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -60,7 +61,7 @@
             <TextBox TextWrapping="Wrap" Text="{Binding Description}" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Width="Auto" MinWidth="200"/>
 
             <Label Content="Creation date:" Grid.Row="2" Grid.Column="0" Margin="0,10,0,0"/>
-            <DatePicker Grid.Row="2" Text="{Binding CreationDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd/MM/yyyy}" Grid.Column="1" Margin="0,10,0,124" Width="Auto" MinWidth="200"
+            <DatePicker Grid.Row="2" Text="{Binding CreationDate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,  StringFormat='{}{0:dd/MM/yyyy}'}" Grid.Column="1" Margin="0,10,0,124" Width="Auto" MinWidth="200"
             DisplayDateEnd="{x:Static sys:DateTime.Now}"/>
         </Grid>
 

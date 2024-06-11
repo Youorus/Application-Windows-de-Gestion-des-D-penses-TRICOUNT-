@@ -48,12 +48,13 @@ namespace prbd_2324_a03.Model
 
             if (string.IsNullOrEmpty(Title)) {
                 AddError(nameof(Title), "Title is required");
-            } else if (Context.Tricounts.Any(t => t.Title == Title)) {
-                AddError(nameof(Title), "Title already exists");
             }
+
+           
 
             return !HasErrors;
         }
+
 
 
         public void Delete() {

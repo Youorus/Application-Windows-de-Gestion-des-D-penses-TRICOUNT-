@@ -6,7 +6,9 @@
              xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:prbd_2324_a03.View"
+              xmlns:vm="clr-namespace:prbd_2324_a03.ViewModel"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:AddTricountViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
@@ -25,8 +27,9 @@
                 <!-- Titre et informations -->
                 <StackPanel Grid.Row="0" Margin="20,20,20,10">
                     <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,3,0,0">      
-            <Run Text="&lt;New Tricount&gt;"/>
-            <Run Text=" - No Description" FontSize="18" FontWeight="Normal" FontStyle="Italic"/>
+            <Run Text="{Binding Title}"/>
+             <Run Text=" - "/>
+            <Run Text="{Binding Description}" FontSize="18" FontWeight="Normal" FontStyle="Italic"/>
                     </TextBlock>
 
                     <TextBlock HorizontalAlignment="Center" FontSize="14" Margin="0,3,0,0">
@@ -97,20 +100,20 @@
                                     <TextBlock Visibility="{c:Binding IsExpense}">
                                         <Run Text="("/>
                                         <Run Text="{Binding Expense}"/>
-                                        <Run Text=" expenses)"/>
+                                        <Run Text="expenses)"/>
                                     </TextBlock>
                                 </TextBlock>      
                             </TextBlock>
                         </StackPanel>
                                 <Button Click="Remove_Click"
-                                    CommandParameter="{Binding}" Visibility="{c:Binding !IsDefault}" Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                            <Image Visibility="{c:Binding !IsExpense}" Source="/images/trash.png" Width="16" Height="16" />
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
-                                </Grid>
+         CommandParameter="{Binding}" Visibility="{c:Binding !IsDefault}" Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Image Source="/images/trash.png" Width="16" Height="16" />
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -128,7 +131,7 @@
 
                 <!-- Boutons d'action principaux -->
                 <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,20,20">
-                    <Button Content="Save" Click="Save_Click"  IsDefault="True" Margin="0,0,20,0" Width="75"/>
+                <Button Content="Save"  Command="{Binding SaveTricountCommand}" IsDefault="True" Margin="0,0,20,0" Width="75"/>
                     <Button Content="Cancel" Click="Cancel_Click" Width="75"/>
                 </StackPanel>
             </Grid>

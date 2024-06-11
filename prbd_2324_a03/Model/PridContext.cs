@@ -44,12 +44,14 @@ public class PridContext : DbContextBase
                     .HasValue<User>(Role.User)
                     .HasValue<Administrator>(Role.Administrator);
 
+
         modelBuilder.Entity<Tricounts>().HasKey(t => t.Id);
         modelBuilder.Entity<Tricounts>()
          .HasMany(t => t.Operations)
          .WithOne(o => o.Tricount)
          .HasForeignKey(o => o.TricountId)
          .OnDelete(DeleteBehavior.ClientCascade);
+     
 
         modelBuilder.Entity<Subscriptions>()
                     .HasKey(s => new { s.TricountId, s.UserId });

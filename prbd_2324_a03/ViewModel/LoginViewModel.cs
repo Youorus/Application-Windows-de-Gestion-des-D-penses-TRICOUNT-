@@ -12,6 +12,8 @@ public class LoginViewModel : ViewModelCommon
     public ICommand LoginBenoit { get; set; }
     public ICommand LoginBoris { get; set; }
     public ICommand LoginXavier { get; set; }
+
+    public ICommand LoginMarc { get; set; }
     public ICommand LoginAdmin { get; set; }
 
     private string _email;
@@ -57,7 +59,10 @@ public class LoginViewModel : ViewModelCommon
         LoginBoris = new RelayCommand(Log1);
         LoginBenoit = new RelayCommand(Log2);
         LoginXavier = new RelayCommand(Log3);
-        LoginAdmin = new RelayCommand(Log4);
+        LoginMarc = new RelayCommand(Log4);
+   
+   LoginAdmin = new RelayCommand(Log5);
+
     }
 
     private void LoginAction() {
@@ -93,9 +98,15 @@ public class LoginViewModel : ViewModelCommon
         NotifyColleagues(App.Messages.MSG_LOGIN, user1);
 
     }
-
     private void Log4() {
         var user1 = Context.Users.FirstOrDefault(x => x.UserId == 4);
+
+        NotifyColleagues(App.Messages.MSG_LOGIN, user1);
+
+    }
+
+    private void Log5() {
+        var user1 = Context.Users.FirstOrDefault(x => x.UserId == 5);
 
         NotifyColleagues(App.Messages.MSG_LOGIN, user1);
 
