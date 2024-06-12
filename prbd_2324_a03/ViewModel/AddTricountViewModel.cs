@@ -15,6 +15,8 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _selectedParticipant, value);
         }
 
+        private  TricountDetailsViewModel tricountDetailsViewModel;
+
         public ObservableCollectionFast<ParticipantsListViewModel> ParticipantsUsers { get; set; } = new ObservableCollectionFast<ParticipantsListViewModel>();
 
         private bool _isVisibleOperationTricount;
@@ -109,7 +111,7 @@ namespace prbd_2324_a03.ViewModel
 
         public void RestoreRemovedParticipants() {
             foreach (var participant in _removedParticipants) {
-                var vm = new ParticipantsListViewModel(participant, Tricount);
+                var vm = new ParticipantsListViewModel(participant, Tricount, IsNew);
                 ParticipantsUsers.Add(vm);
                 _otherUsers.Remove(participant);
             }
@@ -122,19 +124,15 @@ namespace prbd_2324_a03.ViewModel
 
             if (IsNew && Context.Tricounts.Any(t => t.Title == Title && t.Creator == _userId)) {
                 AddError(nameof(Title), "You already have a Tricount with this title.");
-            } 
-            if (!IsNew && Context.Tricounts.Any(t => t.Title == Title && t.Creator == _userId && t.Id != Tricount.Id)) {
+            }else if (!IsNew && Context.Tricounts.Any(t => t.Title == Title && t.Creator == _userId && t.Id != Tricount.Id)) {
                 AddError(nameof(Title), "You already have a Tricount with this title.");
-            }
-            if (IsNew && CreationDate > DateTime.Now) {
+            }else if (IsNew && CreationDate > DateTime.Now) {
                 AddError(nameof(CreationDate), "The creation date can't be in the future");
-            }
-
-            if (!IsNew && CreationDate < Tricount.Created_at) {
+            }else if (!IsNew && CreationDate < Tricount.Created_at) {
                 AddError(nameof(CreationDate), "The creation date can't be before the original creation date");
+            }else if (IsNew && string.IsNullOrEmpty(Title)) {
+                AddError(nameof(Title), "Title is required");
             }
-            Tricount.Validate();
-            AddErrors(Tricount.Errors);
             return !HasErrors;
         }
 
@@ -150,7 +148,7 @@ namespace prbd_2324_a03.ViewModel
      
 
         private void AddAction() {
-            var selectItem = new ParticipantsListViewModel(SelectedParticipant, Tricount);
+            var selectItem = new ParticipantsListViewModel(SelectedParticipant, Tricount, IsNew);
             if (SelectedParticipant != null && !ParticipantsUsers.Contains(selectItem)) {
                 ParticipantsUsers.Add(selectItem);
                 Users.Remove(SelectedParticipant);
@@ -211,9 +209,20 @@ namespace prbd_2324_a03.ViewModel
                 }
 
                 Context.SaveChanges();
+                // Rétablir la visibilité appropriée
+                tricountDetailsViewModel.IsVisibleDetailsTricount = false;
+                tricountDetailsViewModel.IsVisibleOperationTricount = true;
+
+
                 NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+                NotifyColleagues(App.Messages.MSG_VIEWTRICOUNT_CHANGED, Tricount);
+
+
             }
+
+
         }
+
 
 
         private void SortParticipants() {
@@ -236,7 +245,7 @@ namespace prbd_2324_a03.ViewModel
 
         private void AddAllUsersAction() {
             foreach (var user in Users) {
-                var x = new ParticipantsListViewModel(user, Tricount);
+                var x = new ParticipantsListViewModel(user, Tricount, IsNew);
                 if (!ParticipantsUsers.Contains(x)) {
                     ParticipantsUsers.Add(x);
                     SortParticipants(); 
@@ -248,7 +257,7 @@ namespace prbd_2324_a03.ViewModel
         private void AddMySelfAction() {
             var user = Context.Users.FirstOrDefault(u => u.UserId == _userId);
             if (user != null && !ParticipantsUsers.Any(p => p.User.UserId == user.UserId)) {
-                var participantVm = new ParticipantsListViewModel(user, Tricount);
+                var participantVm = new ParticipantsListViewModel(user, Tricount,IsNew);
                 ParticipantsUsers.Add(participantVm);
                 Users.Remove(user);
             }
@@ -270,19 +279,24 @@ namespace prbd_2324_a03.ViewModel
 
 
 
-        public AddTricountViewModel(Tricounts tricount, bool isNew) {
+        public AddTricountViewModel(Tricounts tricount, bool isNew, TricountDetailsViewModel tricountDetailsViewModel) {
             Tricount = tricount;
             IsNew = isNew;
+            this.tricountDetailsViewModel = tricountDetailsViewModel;
+
             RaisePropertyChanged();
             OnRefreshData();
 
             AddUserCommand = new RelayCommand(AddAction, () => SelectedParticipant != null);
             AddAllUserCommand = new RelayCommand(AddAllUsersAction, () => Users.Any());
-            SaveTricountCommand = new RelayCommand(SaveAction, CanSaveAction);
+              SaveTricountCommand = new RelayCommand(SaveAction, CanSaveAction);
+
             AddMySelfCommand = new RelayCommand(AddMySelfAction, () => !ParticipantsUsers.Any(p => p.User.UserId == _userId));
             RemoveParticipant = new RelayCommand<ParticipantsListViewModel>(RemoveParticipantAction);
             CancelTricountCommand = new RelayCommand(CancelTricount, CanCancelAction);
         }
+
+
 
         private bool CanSaveAction() {
             bool canSave = false;
@@ -301,7 +315,7 @@ namespace prbd_2324_a03.ViewModel
 
             if (IsNew) {
                 var user = Context.Users.FirstOrDefault(u => u.UserId == _userId);
-                var vm = new ParticipantsListViewModel(user, Tricount);
+                var vm = new ParticipantsListViewModel(user, Tricount,IsNew);
                 ParticipantsUsers.Add(vm);
             } else {
                 var participants = Context.Subscriptions
@@ -310,7 +324,7 @@ namespace prbd_2324_a03.ViewModel
                     .ToList();
 
                 foreach (var item in participants) {
-                    var vm = new ParticipantsListViewModel(item, Tricount);
+                    var vm = new ParticipantsListViewModel(item, Tricount, IsNew);
                     ParticipantsUsers.Add(vm);
                     _otherUsers.Remove(item);   
                 }

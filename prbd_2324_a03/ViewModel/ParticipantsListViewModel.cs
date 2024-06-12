@@ -1,4 +1,5 @@
-﻿using prbd_2324_a03.Model;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using prbd_2324_a03.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,25 +49,34 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _expense, value);
         }
 
+        private bool _isNew;
+        public bool IsNew {
+            get => _isNew;
+            set => SetProperty(ref _isNew, value);
+        }
 
-        public ParticipantsListViewModel(User user, Tricounts tricounts) {
+        public ParticipantsListViewModel(User user, Tricounts tricounts, bool isNew) {
             User = user;
             Tricount = tricounts;
+            IsNew = isNew;
+
             OnRefreshData();
         }
 
         protected override void OnRefreshData() {
             ExpenseUser();
 
-            var Userx = Context.Users.Where(u => u.UserId == User.UserId).FirstOrDefault();
 
-            FullName = Userx.Full_name;
+            var currentUser = Context.Users.FirstOrDefault(u => u.UserId == _userId);
 
-            if (Userx.UserId != _userId) {
-                IsDefault = false;
+            if (IsNew) {
+                FullName = User.Full_name;
+                IsDefault = User.UserId == currentUser.UserId;
             } else {
-                IsDefault = true;
+                FullName = User.Full_name;
+                IsDefault = Tricount.Creator == User.UserId;
             }
+
 
         }
 

@@ -24,10 +24,10 @@ namespace prbd_2324_a03.View
     public partial class AddTricountView : UserControl
     {
         private readonly AddTricountViewModel _vm;
-        public AddTricountView(Tricounts tricounts, bool isNew) {
+        public AddTricountView(Tricounts tricounts, bool isNew, TricountDetailsViewModel tricountDetailsViewModel) {
             InitializeComponent();
 
-            DataContext = _vm = new AddTricountViewModel(tricounts, isNew);
+            DataContext = _vm = new AddTricountViewModel(tricounts, isNew, tricountDetailsViewModel);
         }
     }
 }

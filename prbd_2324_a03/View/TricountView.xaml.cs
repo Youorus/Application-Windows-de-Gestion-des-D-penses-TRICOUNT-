@@ -21,6 +21,10 @@ namespace prbd_2324_a03.View
  
     public partial class TricountView : WindowBase
     {
+
+        public TricountDetailsViewModel TricountDetails { get; set; }  
+
+
         public TricountView() {
             InitializeComponent();
 
@@ -38,8 +42,12 @@ namespace prbd_2324_a03.View
         }
 
         private void DoDisplayTricount(Tricounts tricounts, bool isNew) {
-            if (tricounts != null)
-                OpenTab(isNew ? "<New Tricount>" : tricounts.Title, tricounts.Title, () => new AddTricountView(tricounts, isNew)); 
+            if (tricounts != null) {
+                TricountDetailsViewModel tricountDetailsViewModel = isNew ? null : new TricountDetailsViewModel(tricounts);
+
+                OpenTab(isNew ? "<New Tricount>" : tricounts.Title, tricounts.Title, () => new AddTricountView(tricounts, isNew, tricountDetailsViewModel));
+            }
+               
         }
 
 

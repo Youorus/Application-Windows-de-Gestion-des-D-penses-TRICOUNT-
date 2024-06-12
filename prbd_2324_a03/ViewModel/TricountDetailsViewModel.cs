@@ -86,10 +86,7 @@ namespace prbd_2324_a03.ViewModel
 
         }
 
-        public void UpdateListTricout() {
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
-
-        }
+      
 
        
 
@@ -115,6 +112,10 @@ namespace prbd_2324_a03.ViewModel
             IsOperation = Context.Operations.Any(o => o.TricountId == Tricount.Id);
 
             IsEdit = Context.Tricounts.Any(t => t.Creator == CurrentUser.UserId) || Context.Users.Any(u => u.Full_name == "Admin");
+
+            // Ensure visibility properties are set correctly
+            RaisePropertyChanged(nameof(IsVisibleDetailsTricount));
+            RaisePropertyChanged(nameof(IsVisibleOperationTricount));
         }
     }
 }

@@ -32,7 +32,7 @@ namespace prbd_2324_a03.View
 
             _vm = new TricountDetailsViewModel(tricounts);
 
-            _addTricountVm = new AddTricountViewModel(tricounts, false);
+            _addTricountVm = new AddTricountViewModel(tricounts, false, _vm);
 
 
             _vm.IsVisibleDetailsTricount = false;
@@ -87,9 +87,10 @@ namespace prbd_2324_a03.View
 
         private void Save_Click(object sender, RoutedEventArgs e) {
 
+           
             DataContext = _vm;
 
-            _vm.UpdateListTricout();
+
 
             // Rétablir la visibilité appropriée
             _vm.IsVisibleDetailsTricount = false;
