@@ -43,6 +43,12 @@ namespace prbd_2324_a03.ViewModel
             set => SetProperty(ref _isVisibleDetailsTricount, value);
         }
 
+        private bool _isCreator;
+        public bool IsCreator {
+            get => _isCreator;
+            set => SetProperty(ref _isCreator, value);
+        }
+
         private bool _isVisibleOperationTricount;
         public bool IsVisibleOperationTricount {
             get => _isVisibleOperationTricount;
@@ -56,6 +62,10 @@ namespace prbd_2324_a03.ViewModel
         public TricountDetailsViewModel(Tricounts tricount) {
             Tricount = tricount;
             OnRefreshData();
+
+            var initiator = Context.Users.FirstOrDefault(u => u.UserId == Tricount.Creator);
+
+            IsCreator = initiator == CurrentUser;
 
             DeleteTricountCommand = new RelayCommand(DeleteTricountAction);
             AddOperationTricountCommand = new RelayCommand(AddOperation);
@@ -72,14 +82,14 @@ namespace prbd_2324_a03.ViewModel
         }
 
         private void AddOperation() {
-            App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, new Operations(), true);
+            App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, new Operations(), true, CurrentUser);
            
         }
 
         public void EditOperation(Operations operation) {
 
             if (operation != null) {
-                App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, operation, false);
+                App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, operation, false, CurrentUser);
             }
 
            

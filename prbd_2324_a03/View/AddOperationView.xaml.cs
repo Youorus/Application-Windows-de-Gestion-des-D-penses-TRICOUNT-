@@ -25,9 +25,9 @@ namespace prbd_2324_a03.View
     public partial class AddOperationView : DialogWindowBase
     {
         private readonly AddOperationViewModel _vm;
-        public AddOperationView(Tricounts tricounts, Operations operations, bool IsNew) {
+        public AddOperationView(Tricounts tricounts, Operations operations, bool IsNew, User user) {
             InitializeComponent();
-            DataContext = _vm = new AddOperationViewModel(tricounts, operations, IsNew);
+            DataContext = _vm = new AddOperationViewModel(tricounts, operations, IsNew, user);
 
             _vm.RequestClose += () => this.Close();
 

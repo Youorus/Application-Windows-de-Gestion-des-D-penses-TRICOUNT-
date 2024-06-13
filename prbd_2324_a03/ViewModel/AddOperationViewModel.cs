@@ -189,10 +189,11 @@ namespace prbd_2324_a03.ViewModel
         }
         public ICommand DeleteOperationCommand { get; set; }
 
-        public AddOperationViewModel(Tricounts tricount, Operations operation, bool isNew) {
+        public AddOperationViewModel(Tricounts tricount, Operations operation, bool isNew, User user) {
             Operation = operation;
             Tricount = tricount;
             IsNew = isNew;
+            ActualUser = user; 
 
             CreationTricountDate = Tricount.Created_at;
 
@@ -260,9 +261,7 @@ namespace prbd_2324_a03.ViewModel
 
             }
 
-            // Définir l'utilisateur actuel sur le premier utilisateur de la liste
-            _currentUser = AllUsers.FirstOrDefault();
-
+          
 
             if (!IsNew) {
                 AmountValid = false;
