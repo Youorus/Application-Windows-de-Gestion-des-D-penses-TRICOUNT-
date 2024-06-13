@@ -44,7 +44,7 @@ namespace prbd_2324_a03.ViewModel
             get => (DateTime)(Operation?.OperationDate);
             set => SetProperty(Operation.OperationDate, value, Operation, (t, v) => {
                 t.OperationDate = v;
-
+                Validate();
             });
         }
 
@@ -151,15 +151,39 @@ namespace prbd_2324_a03.ViewModel
 
         public override bool Validate() {
             ClearErrors();
-            Operation.Validate();
-            AddErrors(Operation.Errors);
+
+            // Vérifier si le titre est déjà utilisé par l'utilisateur courant dans le même Tricount
+            if (Context.Operations.Any(t => t.TricountId == Tricount.Id && t.Title == Title && t.Id != Operation.Id)) {
+                AddError(nameof(Title), "You already have a Operation with this title");
+            }
+
+            // Vérifier si la date de création est dans le futur
+            if (CreationDate > DateTime.Now) {
+                AddError(nameof(CreationDate), "The creation date can't be in the future.");
+            }
+
+            // Vérifier si la date de création est avant la date de création du Tricount
+            if (CreationDate < Tricount.Created_at) {
+                AddError(nameof(CreationDate), "The creation date can't be before the original creation date.");
+            }
+
+            // Vérifier si le titre est vide
+            if (string.IsNullOrEmpty(Title)) {
+                AddError(nameof(Title), "Title is required.");
+            }
+
+            // Vérifier si le montant est valide
+            if (Amount <= 0) {
+                AddError(nameof(Amount), "Amount must be greater than zero.");
+            }
 
 
             return !HasErrors;
         }
 
+
         private bool CanSaveAction() {
-            if (IsNew)
+            if (IsNew || !IsNew)
                 return !string.IsNullOrEmpty(Title) && !AmountValid && !IsCheckValid && !HasErrors;
             return Operation != null && Operation.IsModified;
         }
@@ -172,7 +196,7 @@ namespace prbd_2324_a03.ViewModel
 
             CreationTricountDate = Tricount.Created_at;
 
-            Console.WriteLine(CreationTricountDate);
+      
 
             DeleteOperationCommand = new RelayCommand(DeleteOperation);
 
@@ -266,10 +290,18 @@ namespace prbd_2324_a03.ViewModel
 
 
         private void AddAction() {
-            if (Operation != null) {
-                Operation.Tricount = Tricount;
-                Operation.Creator = ActualUser;
-                Operation.OperationDate = CreationDate;
+            if (!Validate()) return;
+
+            if (IsNew) {
+                // Nouvelle opération
+                Operation = new Operations {
+                    Tricount = Tricount,
+                    Creator = ActualUser,
+                    OperationDate = CreationDate,
+                    Title = Title,
+                    Amount = Amount,
+                    Repartitions = new List<Repartitions>()
+                };
 
                 // Ajout des répartitions
                 foreach (var repartitionVM in AllUsersRepartition) {
@@ -284,13 +316,36 @@ namespace prbd_2324_a03.ViewModel
                 }
 
                 Context.Operations.Add(Operation);
-                Context.SaveChanges();
-                NotifyColleagues(App.Messages.MSG_VIEWTRICOUNT_CHANGED, Tricount);
+            } else {
+                // Mise à jour de l'opération existante
+                Operation.Title = Title;
+                Operation.Amount = Amount;
+                Operation.OperationDate = CreationDate;
+                Operation.Tricount = Tricount;
+                Operation.Creator = ActualUser;
 
-                NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
-                RequestClose?.Invoke();
+                // Mise à jour des répartitions
+                foreach (var repartitionVM in AllUsersRepartition) {
+                    var repartition = Operation.Repartitions.FirstOrDefault(r => r.User == repartitionVM.SelectedParticipant);
+                    if (repartition != null) {
+                        repartition.Weight = repartitionVM.SelectedValue;
+                    } else if (repartitionVM.IsChecked) {
+                        var newRepartition = new Repartitions {
+                            Operations = Operation,
+                            User = repartitionVM.SelectedParticipant,
+                            Weight = repartitionVM.SelectedValue
+                        };
+                        Operation.Repartitions.Add(newRepartition);
+                    }
+                }
             }
+
+            Context.SaveChanges();
+            NotifyColleagues(App.Messages.MSG_VIEWTRICOUNT_CHANGED, Tricount);
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+            RequestClose?.Invoke();
         }
-    
-}
+
+
+    }
 }

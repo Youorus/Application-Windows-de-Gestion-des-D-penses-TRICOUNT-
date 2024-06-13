@@ -78,44 +78,45 @@ namespace prbd_2324_a03.ViewModel
 
         public void EditOperation(Operations operation) {
 
-            if (operation == null) {
-                Console.WriteLine("test");
+            if (operation != null) {
+                App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, operation, false);
             }
 
-            App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, operation, false);
+           
 
         }
 
-      
 
-       
+
+
 
         protected override void OnRefreshData() {
             if (Tricount == null) return;
 
+            // Clear the Operations collection
             Operations.Clear();
+
+            // Fetch the operations related to the current Tricount
             var operationsTricount = Context.Operations
-     .Include(o => o.Creator)
-     .Where(o => o.TricountId == Tricount.Id)
-     .OrderBy(o => o) // Trier par date en ordre croissant
-     .ToList();
+                .Include(o => o.Creator)
+                .Where(o => o.TricountId == Tricount.Id)
+                .OrderByDescending(o => o.OperationDate) // Sort by date in descending order
+                .ToList();
 
-
-
-
-
+            // Add each operation to the Operations collection
             foreach (var operation in operationsTricount) {
                 var viewModel = new OperationCardViewModel(operation);
                 Operations.Add(viewModel);
             }
 
+            // Check if there are any operations for the current Tricount
             IsOperation = Context.Operations.Any(o => o.TricountId == Tricount.Id);
 
+            // Check if the current user is the creator or if the user is an admin
             IsEdit = Context.Tricounts.Any(t => t.Creator == CurrentUser.UserId) || Context.Users.Any(u => u.Full_name == "Admin");
 
-            // Ensure visibility properties are set correctly
-            RaisePropertyChanged(nameof(IsVisibleDetailsTricount));
-            RaisePropertyChanged(nameof(IsVisibleOperationTricount));
+          
         }
+
     }
 }

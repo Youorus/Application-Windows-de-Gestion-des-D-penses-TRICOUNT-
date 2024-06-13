@@ -50,19 +50,30 @@ namespace prbd_2324_a03.ViewModel
 
         private readonly AddOperationViewModel addOperationViewModel;
 
+        
         private int _selectedValue;
         public int SelectedValue {
             get => _selectedValue;
             set {
-                SetProperty(ref _selectedValue, value);
-                addOperationViewModel.UpdateRepartition();
+                if (SetProperty(ref _selectedValue, value)) {
+                    if (value != 0) {
+                        IsChecked = true;
+                    } else {
+                        IsChecked = false;
+                    }
+                    addOperationViewModel.UpdateRepartition();
+                }
             }
         }
 
         private void initalizeSelectValue() {
             if (IsChecked) {
-                SelectedValue += 1;
-            }else { SelectedValue = 0; }
+                if (SelectedValue == 0) {
+                    SelectedValue = 1; // Évite les boucles infinies
+                }
+            } else {
+                SelectedValue = 0;
+            }
         }
 
 

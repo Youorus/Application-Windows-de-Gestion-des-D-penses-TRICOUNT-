@@ -122,15 +122,17 @@ namespace prbd_2324_a03.ViewModel
         public override bool Validate() {
             ClearErrors();
 
-            if (IsNew && Context.Tricounts.Any(t => t.Title == Title && t.Creator == _userId)) {
+            if (Context.Tricounts.Any(t => t.Title == Title && t.Creator == _userId)) {
                 AddError(nameof(Title), "You already have a Tricount with this title.");
-            }else if (!IsNew && Context.Tricounts.Any(t => t.Title == Title && t.Creator == _userId && t.Id != Tricount.Id)) {
-                AddError(nameof(Title), "You already have a Tricount with this title.");
-            }else if (IsNew && CreationDate > DateTime.Now) {
+            }
+           
+            if (IsNew && CreationDate > DateTime.Now) {
                 AddError(nameof(CreationDate), "The creation date can't be in the future");
-            }else if (!IsNew && CreationDate < Tricount.Created_at) {
+            } 
+            if (!IsNew && CreationDate < Tricount.Created_at) {
                 AddError(nameof(CreationDate), "The creation date can't be before the original creation date");
-            }else if (IsNew && string.IsNullOrEmpty(Title)) {
+            }
+            if (IsNew && string.IsNullOrEmpty(Title)) {
                 AddError(nameof(Title), "Title is required");
             }
             return !HasErrors;
@@ -299,13 +301,7 @@ namespace prbd_2324_a03.ViewModel
 
 
         private bool CanSaveAction() {
-            bool canSave = false;
-            if (IsNew || !IsNew) {
-                if (!string.IsNullOrEmpty(Title) && !HasErrors) {
-                    canSave = true;
-                }
-            }
-            return canSave;
+            return !string.IsNullOrEmpty(Title) && !HasErrors;
         }
 
         protected override void OnRefreshData() {
