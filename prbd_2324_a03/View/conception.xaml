@@ -7,7 +7,7 @@
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d" 
       Background="White"
-      Width="260" Height="325"
+      Width="260" Height="170"
       Title="conception">
 
     <Grid Margin="20,20,20,10">
@@ -29,26 +29,27 @@
         </Grid.RowDefinitions>
 
         <!-- Première rangée -->
-        <Label x:Name="label" Content="Title:" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5" />
+        <Label x:Name="label" Content="Email:" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5" />
         <TextBox x:Name="txtEmail" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center"
               Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Height="18" Margin="0,0,0,5" />
 
         <!-- Deuxième rangée -->
-        <Label Content="Amount:" Grid.Row="1" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
+        <Label Content="Password:" Grid.Row="1" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
         <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="18" Margin="0,0,0,5" />
 
-        <!-- Troisième rangée -->
-        <Label Content="Initiator:" Grid.Row="2" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
-        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" />
+        <!-- Deuxième rangée -->
+        <Label Content="ConfirmPassword:" Grid.Row="2" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
+        <PasswordBox x:Name="txtConfirmPassword" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Height="18" Margin="0,0,0,5" />
 
-        <!-- Quatrième rangée -->
-        <Label Content="Date: " Grid.Row="3" VerticalAlignment="Center" Padding="5" Height="26" Margin="0,0,3,5"/>
-        <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" />
-        <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="0,8,0,1" Grid.Row="9" Width="18"/>
-        <TextBox HorizontalAlignment="Left" FontSize="10" Margin="18,8,0,0" Grid.Row="9" TextWrapping="Wrap" Text="Benoit" VerticalAlignment="Top" Width="40"  Height="16"/>
-        <xctk:IntegerUpDown Grid.Column="01" VerticalAlignment="Top" Width="44" HorizontalAlignment="Left" Minimum="1" Maximum="100" Margin="30,8,0,0" Grid.Row="9" Height="16"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="101,8,0,0" Grid.Row="9" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="51" Height="16"/>
-        <!-- Ajoutez plus de contenu ici -->
+        <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+            <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" >
+          <Run Text="If you have a login and a password, click"/>
+          <Hyperlink><Run Text="here"/></Hyperlink>
+          <Run Text="to Login."/>
+            </TextBlock>
+        </DockPanel>
+
+
 
     </Grid>
 </Page>

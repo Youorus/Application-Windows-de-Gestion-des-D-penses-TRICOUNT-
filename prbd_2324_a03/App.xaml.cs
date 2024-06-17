@@ -20,6 +20,7 @@ public partial class App : ApplicationBase<User, PridContext>
         MSG_TRICOUNT_CHANGED,
         MSG_DISPLAY_TRICOUNT,
         MSG_DISPLAY_MEMBER,
+        MSG_SIGNUP,
         MSG_LOGOUT,
         MSG_CLOSE_TAB,
         MSG_RESET,
@@ -54,6 +55,11 @@ public partial class App : ApplicationBase<User, PridContext>
             Logout();
             NavigateTo<LoginViewModel, User, PridContext>();
         });
+
+        Register(this, Messages.MSG_SIGNUP, () => {
+            NavigateTo<SignUpViewModel, User, PridContext>();
+        });
+
 
         Register(this, Messages.MSG_RESET, () => {
             Context.Database.EnsureDeleted();

@@ -10,11 +10,15 @@ public class LoginViewModel : ViewModelCommon
     public ICommand LoginCommand { get; set; }
 
     public ICommand LoginBenoit { get; set; }
+
+    public ICommand SignUpCommand { get; set; }
     public ICommand LoginBoris { get; set; }
     public ICommand LoginXavier { get; set; }
 
     public ICommand LoginMarc { get; set; }
     public ICommand LoginAdmin { get; set; }
+
+  
 
     private string _email;
 
@@ -63,6 +67,8 @@ public class LoginViewModel : ViewModelCommon
    
    LoginAdmin = new RelayCommand(Log5);
 
+        SignUpCommand = new RelayCommand(SignUp);
+
     }
 
     private void LoginAction() {
@@ -76,6 +82,10 @@ public class LoginViewModel : ViewModelCommon
 
     protected override void OnRefreshData() {
         
+    }
+
+    private void SignUp() {
+        NotifyColleagues(App.Messages.MSG_SIGNUP);
     }
 
     private void Log1() {
