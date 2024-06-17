@@ -36,4 +36,6 @@ public class User : EntityBase<PridContext> {
         Password = password;
         Role = Role.User;
     }
+
+    
 }
