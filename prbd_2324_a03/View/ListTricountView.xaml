@@ -37,7 +37,7 @@
             <ListView x:Name="listView" ItemsSource="{Binding Tricounts}" MouseDoubleClick="ListView_MouseDoubleClick">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
+                        <WrapPanel Orientation="Horizontal" ItemWidth="180" MinWidth="740"/>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>

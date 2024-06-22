@@ -111,31 +111,44 @@ namespace prbd_2324_a03.ViewModel
         protected override void OnRefreshData() {
             Tricounts.Clear();
 
-            // Obtenez les tricounts créés par l'utilisateur
-            var tricountsCreatedByUser = Context.Tricounts
-                .Where(t => t.Creator == CurrentUser.UserId);
 
-            // Obtenez les tricounts auxquels l'utilisateur participe
-            var tricountsParticipatedByUser = Context.Tricounts
-                .Where(t => t.Subscriptions.Any(s => s.UserId == CurrentUser.UserId));
 
-            // Combinez les deux ensembles de tricounts
-            var allTricounts = tricountsCreatedByUser
-                .Union(tricountsParticipatedByUser)
-                .Select(t => new {
-                    Tricount = t,
-                    LastOperationDate = t.Operations.Any() ? t.Operations.Max(o => o.OperationDate) : (DateTime?)null,
-                    CreatedAt = t.Created_at
-                })
-                .OrderByDescending(t => t.LastOperationDate ?? t.CreatedAt)
-                .ToList();
 
-            // Ajoutez chaque tricount trié à la collection
-            foreach (var tricountInfo in allTricounts) {
-                var viewModel = new TricountCardViewModel(tricountInfo.Tricount);
-                Tricounts.Add(viewModel);
+            if (CurrentUser.Role == Role.Administrator) {
+                var tricount = Context.Tricounts;
+                foreach (var tricountInfo in tricount) {
+                    var viewModel = new TricountCardViewModel(tricountInfo);
+                    Tricounts.Add(viewModel);
+                }
+            } else {
+                // Obtenez les tricounts créés par l'utilisateur
+                var tricountsCreatedByUser = Context.Tricounts
+                    .Where(t => t.Creator == CurrentUser.UserId);
+
+                // Obtenez les tricounts auxquels l'utilisateur participe
+                var tricountsParticipatedByUser = Context.Tricounts
+                    .Where(t => t.Subscriptions.Any(s => s.UserId == CurrentUser.UserId));
+
+                // Combinez les deux ensembles de tricounts
+                var allTricounts = tricountsCreatedByUser
+                    .Union(tricountsParticipatedByUser)
+                    .Select(t => new {
+                        Tricount = t,
+                        Creator = t.CreatorTricount,
+                        LastOperationDate = t.Operations.Any() ? t.Operations.Max(o => o.OperationDate) : (DateTime?)null,
+                        CreatedAt = t.Created_at
+                    })
+                    .OrderByDescending(t => t.LastOperationDate ?? t.CreatedAt)
+                    .ToList();
+
+                // Ajoutez chaque tricount trié à la collection
+                foreach (var tricountInfo in allTricounts) {
+                    var viewModel = new TricountCardViewModel(tricountInfo.Tricount);
+                    Tricounts.Add(viewModel);
+                }
             }
 
+            
 
         }
 

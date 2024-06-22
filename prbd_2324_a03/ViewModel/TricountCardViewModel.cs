@@ -58,13 +58,9 @@ namespace prbd_2324_a03.ViewModel
             Title = Tricount.Title;
             Description = Tricount.Description;
 
-            if (Tricount.CreatorTricount != CurrentUser) {
-               // Creator = Context.Tricounts.FirstOrDefault(t ); // Utilise directement l'objet déjà chargé
-            } else {
-                Creator = Context.Users.FirstOrDefault(u => u.UserId == Tricount.CreatorTricount.UserId);
-            }
 
 
+            Creator = Tricount.CreatorTricount;
 
             Created_at = Tricount.Created_at;
         }
