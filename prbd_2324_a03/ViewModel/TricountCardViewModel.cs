@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using PRBD_Framework;
+using System.Collections.ObjectModel;
 
 namespace prbd_2324_a03.ViewModel
 {
@@ -27,6 +28,13 @@ namespace prbd_2324_a03.ViewModel
 
         public string Colors { get; set; }
 
+        private ObservableCollection<Operations> _operations;
+
+        public ObservableCollection<Operations> Operations {
+            get => _operations;
+            set => SetProperty(ref _operations, value);
+        }
+
 
         public Tricounts Tricount {
             get => _tricount;
@@ -46,9 +54,18 @@ namespace prbd_2324_a03.ViewModel
             MyExpenseTricountAndBalance();
             TricountCardColor();
             IsOperationTricount();
+            LoadOperations();   
             Title = Tricount.Title;
             Description = Tricount.Description;
-           Creator = Tricount.CreatorTricount;
+
+            if (Tricount.CreatorTricount != CurrentUser) {
+               // Creator = Context.Tricounts.FirstOrDefault(t ); // Utilise directement l'objet déjà chargé
+            } else {
+                Creator = Context.Users.FirstOrDefault(u => u.UserId == Tricount.CreatorTricount.UserId);
+            }
+
+
+
             Created_at = Tricount.Created_at;
         }
 
@@ -142,6 +159,13 @@ namespace prbd_2324_a03.ViewModel
             }
 
             return userBalances;
+        }
+
+        private void LoadOperations() {
+            Operations = new ObservableCollection<Operations>(Context.Operations
+                .Where(o => o.TricountId == Tricount.Id)
+                .OrderByDescending(o => o.OperationDate)
+                .ToList());
         }
 
         private IEnumerable<int> GetUserIdsInTricount(int tricountId) {

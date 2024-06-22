@@ -17,6 +17,7 @@ public partial class App : ApplicationBase<User, PridContext>
         MSG_VIEWTRICOUNT_CHANGED,
         MSG_CANCEL_TRICOUNT,
         MSG_TITLE_CHANGED,
+        MSG_LOGIN_VIEW,
         MSG_TRICOUNT_CHANGED,
         MSG_DISPLAY_TRICOUNT,
         MSG_DISPLAY_MEMBER,
@@ -58,6 +59,10 @@ public partial class App : ApplicationBase<User, PridContext>
 
         Register(this, Messages.MSG_SIGNUP, () => {
             NavigateTo<SignUpViewModel, User, PridContext>();
+        });
+
+        Register(this, Messages.MSG_LOGIN_VIEW, () => {
+            NavigateTo<LoginViewModel, User, PridContext>();
         });
 
 

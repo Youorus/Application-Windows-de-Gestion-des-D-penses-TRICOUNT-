@@ -7,13 +7,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:prbd_2324_a03.View"
         mc:Ignorable="d"
-        Title="SignUp"   Width="300" Height="280">
+              WindowStartupLocation="CenterScreen"
+       ResizeMode="NoResize"
+        Title="SignUp"   Width="300" Height="261">
     
     <Window.DataContext>
         <vm:SignUpViewModel x:Name="vm"/>
     </Window.DataContext>
     
-    <Grid Margin="20,20,20,10">
+    <Grid Margin="20,20,20,14">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" MinWidth="58"/>
             <ColumnDefinition/>
@@ -50,23 +52,34 @@
         <PasswordBox x:Name="txtConfirmPassword"  f:PasswordHelper.Attach="True"
  f:PasswordHelper.Password="{Binding PasswordConfirm, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="18" Margin="0,0,0,5" />
 
-        <DockPanel Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
-            <Button x:Name="btnCancel" Content="Cancel" 
+
+        <DockPanel Grid.Row="5" Grid.ColumnSpan="2">
+            <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220">
+    <Run Text="If you have a login and a password, click "/>
+    <InlineUIContainer BaselineAlignment="Center">
+        <Button Command="{Binding LoginCommand}" Background="Transparent" Padding="0" BorderThickness="0" VerticalAlignment="Center">
+            <Button.Content>
+                <TextBlock TextDecorations="Underline" Foreground="Blue">here</TextBlock>
+            </Button.Content>
+        </Button>
+    </InlineUIContainer>
+    <Run Text=" to Login."/>
+</TextBlock>
+        </DockPanel>
+        
+
+        <DockPanel Grid.Row="6" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+            <Button x:Name="btnCancel" Click="btnCancel_Click" Content="Cancel" 
             HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsCancel="True" Margin="0,0,10,0" />
             <Button x:Name="btnLogin" Content="SignUp"
             HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsDefault="True" Margin="10,0,0,0" 
             Command="{Binding SignUpCommand}"/>
         </DockPanel>
 
-        <DockPanel Grid.Row="5" Grid.ColumnSpan="2">
-            <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" >
-        <Run Text="If you have a login and a password, click"/>
-        <Hyperlink><Run Text="here"/></Hyperlink>
-        <Run Text="to Login."/>
-            </TextBlock>
-        </DockPanel>
-        
        
+
+
+
 
 
 

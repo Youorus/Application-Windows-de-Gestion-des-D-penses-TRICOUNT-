@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:prbd_2324_a03.ViewModel"
         mc:Ignorable="d"
         Title="Login" WindowStartupLocation="CenterScreen"
-        FocusManager.FocusedElement="{Binding ElementName=txtPseudo}" ResizeMode="NoResize"
+       ResizeMode="NoResize"
         Width="260" Height="360"
         SizeToContent="WidthAndHeight" >
     <Window.DataContext>
@@ -47,15 +47,22 @@
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsDefault="True" Margin="10,0,0,0" 
                     Command="{Binding LoginCommand}"/>
         </DockPanel>
+
         <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
-            <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" >
-                <Run Text="If you don't have a login and a password, click"/>
-                <Button Content="here" Command="{Binding SignUpCommand}" Margin="0,0,0,0" Background="Transparent" />
-                
-                    
-                <Run Text="to sign-up."/>
-            </TextBlock>
+            <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" VerticalAlignment="Center">
+        <Run Text="If you don't have a login and a password, click "/>
+        <InlineUIContainer BaselineAlignment="Center">
+            <Button Command="{Binding SignUpCommand}" Background="Transparent" Padding="0" BorderThickness="0" VerticalAlignment="Center">
+                <Button.Content>
+                    <TextBlock TextDecorations="Underline" Foreground="Blue">here</TextBlock>
+                </Button.Content>
+            </Button>
+        </InlineUIContainer>
+        <Run Text=" to sign-up."/>
+    </TextBlock>
         </DockPanel>
+
+
 
         <DockPanel Grid.Row="5" Grid.ColumnSpan="2">
             <TextBlock Height="auto" TextWrapping="Wrap" Margin="7" TextAlignment="Center" HorizontalAlignment="Center" Width="220" Foreground="Red">

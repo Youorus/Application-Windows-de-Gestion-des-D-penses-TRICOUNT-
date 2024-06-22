@@ -23,5 +23,8 @@ namespace prbd_2324_a03.View
         public SignUpView() {
             InitializeComponent();
         }
+        public void btnCancel_Click(object sender, RoutedEventArgs e) {
+            Close();
+        }
     }
 }

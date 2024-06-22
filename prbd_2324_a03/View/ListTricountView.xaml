@@ -14,59 +14,59 @@
         <vm:ListTricountViewModel x:Name="vm"/>
     </UserControl.DataContext>
 
-    <Grid>
-        <!-- Contenu principal -->
-        <Grid>
-            <ItemsControl ItemsSource="{Binding Tricounts}">
-                <ItemsControl.ItemsPanel>
+    <Grid Margin="10">
+        <!-- Define Rows: Filter Row, Content Row, Footer Row -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Filter Grid -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" FontSize="14" Margin="0,0,5,0"/>
+            <Button Content="Clear" Grid.Column="1" Command="{Binding ClearFilter}" Margin="5,0,0,0"/>
+        </Grid>
+
+        <!-- Main Content Grid -->
+        <Grid Grid.Row="1">
+            <ListView x:Name="listView" ItemsSource="{Binding Tricounts}" MouseDoubleClick="ListView_MouseDoubleClick">
+                <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
                     <DataTemplate>
                         <local:TricountCardView Margin="5"/>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
 
         <!-- Footer Grid -->
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid Grid.Row="2" Height="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <Grid>
-                <ListView x:Name="listView"  ItemsSource="{Binding Tricounts}" MouseDoubleClick="ListView_MouseDoubleClick">
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <local:TricountCardView Margin="5"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
-            <!-- Footer -->
-            <Grid Grid.Row="1" Height="40">
-                <!-- Bouton à gauche -->
-                <Button Content=" New Tricount " x:Name="btnNew" Command="{Binding NewTricount}"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+            <!-- New Tricount Button -->
+            <Button Content="New Tricount" x:Name="btnNew" Command="{Binding NewTricount}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
 
-                <!-- Border avec des couleurs différentes à droite -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
-                    <Border Width="30" Height="10" Background="LightGray" Margin="5"/>
-                    <TextBlock Text=" Null balance "/>
-                    <Border Width="30"  Height="10" Background="LightGreen"  Margin="5"/>
-                    <TextBlock Text=" Positive Balance "/>
-                    <Border Width="30"  Height="10" Background="LightPink"  Margin="5"/>
-                    <TextBlock Text=" Negative Balance "/>
-                </StackPanel>
-            </Grid>
+            <!-- Balance Legend -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
+                <Border Width="30" Height="10" Background="LightGray" Margin="5"/>
+                <TextBlock Text="Null balance" VerticalAlignment="Center"/>
+                <Border Width="30" Height="10" Background="LightGreen" Margin="5"/>
+                <TextBlock Text="Positive Balance" VerticalAlignment="Center"/>
+                <Border Width="30" Height="10" Background="LightPink" Margin="5"/>
+                <TextBlock Text="Negative Balance" VerticalAlignment="Center"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

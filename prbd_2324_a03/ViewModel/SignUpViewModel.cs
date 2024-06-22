@@ -11,10 +11,9 @@ using System.Windows.Input;
 
 namespace prbd_2324_a03.ViewModel
 {
-    public class SignUpViewModel : ViewModelCommon
-    {
+    public class SignUpViewModel : ViewModelCommon {
         public ICommand SignUpCommand { get; set; }
-
+        public ICommand LoginCommand {  get; set; }
 
         private string _pseudo;
 
@@ -94,6 +93,11 @@ namespace prbd_2324_a03.ViewModel
 
         public SignUpViewModel() {
             SignUpCommand = new RelayCommand(SignUpAction, () => _email != null && _password != null && _pseudo != null && _passwordConfirm != null && !HasErrors);
+            LoginCommand = new RelayCommand(LoginAction);
+        }
+
+        public void LoginAction() {
+            NotifyColleagues(App.Messages.MSG_LOGIN_VIEW);
         }
 
 
