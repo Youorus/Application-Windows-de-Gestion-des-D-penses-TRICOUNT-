@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using prbd_2324_a03.Model;
 using prbd_2324_a03.View;
 using PRBD_Framework;
@@ -23,6 +24,12 @@ namespace prbd_2324_a03.ViewModel
                     OnRefreshData();
                 }
             }
+        }
+
+        private ObservableCollectionFast<BalanceProgressBarViewModel> _allUserParticipant = new ObservableCollectionFast<BalanceProgressBarViewModel>();
+        public ObservableCollectionFast<BalanceProgressBarViewModel> AllUsersParticipant {
+            get => _allUserParticipant;
+            set => SetProperty(ref _allUserParticipant, value);
         }
 
         private bool _isEdit;
@@ -63,6 +70,8 @@ namespace prbd_2324_a03.ViewModel
             Tricount = tricount;
             OnRefreshData();
 
+
+
             var initiator = Context.Users.FirstOrDefault(u => u.UserId == Tricount.Creator);
 
             IsCreator = initiator == CurrentUser;
@@ -81,6 +90,23 @@ namespace prbd_2324_a03.ViewModel
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         }
 
+
+        private void AddUsersParticipants() {
+            var participants = Context.Subscriptions
+                   .Where(s => s.TricountId == Tricount.Id)
+                   .Select(s => s.User)
+                   .OrderBy(u => u.Full_name)
+                   .ToList();
+
+            AllUsersParticipant.Clear();
+            foreach (var item in participants) {
+                var vm = new BalanceProgressBarViewModel(item, Tricount);
+                AllUsersParticipant.Add(vm);
+            }
+        }
+
+
+
         private void AddOperation() {
             App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, new Operations(), true, CurrentUser);
            
@@ -91,8 +117,6 @@ namespace prbd_2324_a03.ViewModel
             if (operation != null) {
                 App.ShowDialog<AddOperationViewModel, Operations, PridContext>(Tricount, operation, false, CurrentUser);
             }
-
-           
 
         }
 
@@ -125,8 +149,10 @@ namespace prbd_2324_a03.ViewModel
             // Check if the current user is the creator or if the user is an admin
             IsEdit = Context.Tricounts.Any(t => t.Creator == CurrentUser.UserId) || Context.Users.Any(u => u.Full_name == "Admin");
 
-          
+
+            AddUsersParticipants(); 
         }
+        
 
     }
 }

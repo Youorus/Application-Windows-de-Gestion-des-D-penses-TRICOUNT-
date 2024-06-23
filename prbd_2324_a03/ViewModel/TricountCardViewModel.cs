@@ -1,5 +1,6 @@
 ﻿using prbd_2324_a03.Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
@@ -11,7 +12,6 @@ namespace prbd_2324_a03.ViewModel
         private Tricounts _tricount;
         private readonly int userId = CurrentUser.UserId;
 
-
         public DateTime LastOperationDate { get; set; }
         public int CountUser { get; set; }
 
@@ -20,11 +20,11 @@ namespace prbd_2324_a03.ViewModel
         public User Creator { get; set; }
         public DateTime Created_at { get; set; }
         public int CountOperation { get; set; }
-        public double ExpenseTricount { get; set; } 
+        public double ExpenseTricount { get; set; }
         public double MyBalanceTricount { get; set; }
         public double MyExpenseTricount { get; set; }
 
-        public bool IsTextBoxVisible { get;set;} = true;
+        public bool IsTextBoxVisible { get; set; } = true;
 
         public string Colors { get; set; }
 
@@ -34,7 +34,6 @@ namespace prbd_2324_a03.ViewModel
             get => _operations;
             set => SetProperty(ref _operations, value);
         }
-
 
         public Tricounts Tricount {
             get => _tricount;
@@ -54,14 +53,11 @@ namespace prbd_2324_a03.ViewModel
             MyExpenseTricountAndBalance();
             TricountCardColor();
             IsOperationTricount();
-            LoadOperations();   
+            LoadOperations();
             Title = Tricount.Title;
             Description = Tricount.Description;
 
-
-
             Creator = Tricount.CreatorTricount;
-
             Created_at = Tricount.Created_at;
         }
 
@@ -84,21 +80,20 @@ namespace prbd_2324_a03.ViewModel
         }
 
         private void IsOperationTricount() {
-           if(CountOperation == 0) {
+            if (CountOperation == 0) {
                 IsTextBoxVisible = false;
             }
         }
-
 
         private void TricountCardColor() {
             if (MyBalanceTricount < 0) {
                 Colors = "LightPink";
             } else if (MyBalanceTricount > 0) {
                 Colors = "LightGreen";
-            }else { Colors = "LightGray";
+            } else {
+                Colors = "LightGray";
             }
         }
-       
 
         private void CountOperationTricount() {
             CountOperation = Context.Operations
@@ -155,6 +150,11 @@ namespace prbd_2324_a03.ViewModel
             }
 
             return userBalances;
+        }
+
+        public double GetUserBalanceInTricount(int userId, int tricountId) {
+            var userBalances = CalculateUserBalances(tricountId);
+            return userBalances.ContainsKey(userId) ? userBalances[userId] : 0.0;
         }
 
         private void LoadOperations() {

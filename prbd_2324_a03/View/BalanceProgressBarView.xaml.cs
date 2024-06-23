@@ -18,9 +18,9 @@ namespace prbd_2324_a03.View
     /// <summary>
     /// Interaction logic for BalanceProgressBar.xaml
     /// </summary>
-    public partial class BalanceProgressBar : UserControl
+    public partial class BalanceProgressBarView : UserControl
     {
-        public BalanceProgressBar()
+        public BalanceProgressBarView()
         {
             InitializeComponent();
         }
