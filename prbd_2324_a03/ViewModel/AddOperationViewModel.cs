@@ -286,6 +286,9 @@ namespace prbd_2324_a03.ViewModel
             Operation.Delete();
             NotifyColleagues(App.Messages.MSG_CANCEL_TRICOUNT, Tricount);
             NotifyColleagues(App.Messages.MSG_VIEWTRICOUNT_CHANGED, Tricount);
+            // Demander la fermeture du dialogue
+            RequestClose?.Invoke();
+
         }
 
 

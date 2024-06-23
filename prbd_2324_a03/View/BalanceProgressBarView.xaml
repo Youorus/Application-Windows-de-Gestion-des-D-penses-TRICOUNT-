@@ -53,7 +53,6 @@
             <Run Text="{Binding Fullname}"/>
             <TextBlock  Visibility="{c:Binding IsDefault}" FontWeight="Bold" Height="30" Text="(me)" />
         </TextBlock>
-        <TextBlock x:Name="valueTextBox" Text="{Binding Fullname}" Height="30" VerticalAlignment="Center" Margin="10,10,0,0" Grid.Column="1" />
       
     </Grid>
 </UserControl>
